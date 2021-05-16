@@ -1,0 +1,16 @@
+jwt:
+  secret_key: abc
+  expire_time: 6
+  buffer_time: 1200
+
+db:
+  type: postgres
+
+postgres:
+  db_host: localhost
+  db_port: 5432
+  db_name: opiece_db
+  db_username: opiece
+  db_password: postgres
+  ssl_mode: false
+  timezone: Asia/Shanghai
