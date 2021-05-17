@@ -7,15 +7,40 @@ import (
 	"opiece/server/global"
 	"opiece/server/middleware"
 	"opiece/server/model"
+	"opiece/service"
 	"time"
 )
 
 func Login(c *gin.Context) {
 	var L model.User
 	_ = c.ShouldBind(&L)
+	if L.Username == "admin" && L.Password == "admin" {
+		tokenNext(c, L)
+	}
 }
 
-func Register(c *gin.Context){}
+func Register(c *gin.Context){
+	var R model.User
+	_ = c.ShouldBind(&R)
+	user := model.User{
+		Username: R.Username,
+		Password: R.Password,
+		Email:    R.Email,
+	}
+	userRet, err := service.Register(user)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "注册用户失败",
+		})
+		c.Abort()
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "注册成功",
+			"user": userRet,
+		})
+	}
+
+}
 
 func tokenNext(c *gin.Context, user model.User) {
 	j := middleware.NewJWT() // 唯一签名
@@ -36,5 +61,10 @@ func tokenNext(c *gin.Context, user model.User) {
 		})
 		return
 	}
-	_ = token
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+		"message": "ok",
+		"token": token,
+		"expires_at": claims.StandardClaims.ExpiresAt * 1000,
+	})
 }

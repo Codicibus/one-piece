@@ -1,10 +1,9 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"opiece/server/core"
 	"opiece/server/middleware"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {

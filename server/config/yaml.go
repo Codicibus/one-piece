@@ -16,18 +16,18 @@ type Config struct {
 		Type string `yaml:"type"`
 	} `yaml:"db"`
 	Postgres struct {
+		DBPort     int    `yaml:"db_port"`
 		DBHost     string `yaml:"db_host"`
 		DBName     string `yaml:"db_name"`
-		DBPort     int    `yaml:"db_port"`
 		DBUsername string `yaml:"db_username"`
 		DBPassword string `yaml:"db_password"`
-		SSLMode    bool   `yaml:"ssl_mode"`
+		SSLMode    string   `yaml:"ssl_mode"`
 		Timezone   string `yaml:"timezone"`
 	} `yaml:"postgres"`
 }
 
 func ReadYAMLConfig() *Config {
-	data, err := ioutil.ReadFile("opiece.yaml")
+	data, err := ioutil.ReadFile("cmd/opiece.yaml")
 	if err != nil {
 		panic(err)
 	}

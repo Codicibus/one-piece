@@ -11,6 +11,7 @@ import (
 var (
 	OConfig *config.Config
 	OAuthJWT *jwt.GinJWTMiddleware
+	ODB *gorm.DB
 )
 
 
