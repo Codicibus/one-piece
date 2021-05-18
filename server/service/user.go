@@ -1,12 +1,11 @@
 package service
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"errors"
 	"gorm.io/gorm"
 	"opiece/server/global"
 	"opiece/server/model"
+	"opiece/utils"
 )
 
 func Register(u model.User) (model.User, error) {
@@ -14,14 +13,15 @@ func Register(u model.User) (model.User, error) {
 	if !errors.Is(global.ODB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) {
 		return model.User{}, errors.New("用户名已存在")
 	}
-	h := md5.New()
-	h.Write([]byte(u.Password))
-	u.Password = hex.EncodeToString(h.Sum(nil))
+	u.Password = utils.MD5(u.Password)
 	return u, global.ODB.Create(&u).Error
 }
 
-func Login(user model.User) error {
-	return nil
+func Login(u *model.User) (*model.User, error) {
+	var user model.User
+	u.Password = utils.MD5(u.Password)
+	err := global.ODB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Error
+	return &user, err
 }
 
 func ChangePassword(user model.User, newPassword string) (error, model.User) {
