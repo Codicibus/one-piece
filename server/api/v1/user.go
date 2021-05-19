@@ -14,6 +14,14 @@ import (
 func Login(c *gin.Context) {
 	var L model.User
 	_ = c.ShouldBind(&L)
+	var user model.User
+	user.Username = L.Username
+	user.Password = L.Password
+	if userRet, err := service2.Login(&user); err != nil {
+		response.FailWithDetailed(nil, "登录失败，用户名不存在或密码错误", c)
+	} else {
+		tokenNext(c, *userRet)
+	}
 }
 
 func Register(c *gin.Context) {
