@@ -8,9 +8,9 @@ import (
 
 type Config struct {
 	JWT struct {
-		SecretKey      string `yaml:"secret_key"`
-		ExpireTime int64    `yaml:"expire_time"`
-		BufferTime int64 `yaml:"buffer_time"`
+		SecretKey  string `yaml:"secret_key"`
+		ExpireTime int64  `yaml:"expire_time"`
+		BufferTime int64  `yaml:"buffer_time"`
 	} `yaml:"jwt"`
 	DB struct {
 		Type string `yaml:"type"`
@@ -21,13 +21,13 @@ type Config struct {
 		DBName     string `yaml:"db_name"`
 		DBUsername string `yaml:"db_username"`
 		DBPassword string `yaml:"db_password"`
-		SSLMode    string   `yaml:"ssl_mode"`
+		SSLMode    string `yaml:"ssl_mode"`
 		Timezone   string `yaml:"timezone"`
 	} `yaml:"postgres"`
 }
 
 func ReadYAMLConfig() *Config {
-	data, err := ioutil.ReadFile("cmd/opiece.yaml")
+	data, err := ioutil.ReadFile("opiece.yaml")
 	if err != nil {
 		panic(err)
 	}

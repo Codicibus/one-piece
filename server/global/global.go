@@ -9,15 +9,18 @@ import (
 )
 
 var (
-	OConfig *config.Config
+	OConfig  *config.Config
 	OAuthJWT *jwt.GinJWTMiddleware
-	ODB *gorm.DB
+	ODB      *gorm.DB
 )
 
+var (
+	MIMEImages = []string{"image/png"}
+)
 
 type OModel struct {
-	ID        uint           `gorm:"primarykey"` // 主键ID
-	CreatedAt time.Time      // 创建时间
-	UpdatedAt time.Time      // 更新时间
-	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"` // 删除时间
+	ID        uint           `gorm:"primarykey" json:"-"` // 主键ID
+	CreatedAt time.Time      `json:"-"`                   // 创建时间
+	UpdatedAt time.Time      `json:"-"`                   // 更新时间
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`      // 删除时间
 }

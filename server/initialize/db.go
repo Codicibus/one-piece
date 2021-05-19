@@ -27,7 +27,7 @@ func GormMYSQL() *gorm.DB {
 }
 
 func MigrateTables(db *gorm.DB) {
-	err := db.AutoMigrate(model.User{}, model.Article{})
+	err := db.AutoMigrate(model.User{}, model.Article{}, model.PICs{})
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -12,3 +12,10 @@ func InitUserRouter(Router *gin.RouterGroup) {
 		UserRouter.POST("login", v1.Login)
 	}
 }
+
+func InitArticleRouter(Router *gin.RouterGroup) {
+	ArticleRouter := Router.Group("article")
+	{
+		ArticleRouter.POST("post_article", v1.PostArticle)
+	}
+}

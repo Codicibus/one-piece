@@ -1,7 +1,7 @@
 jwt:
   secret_key: abc
-  expire_time: 6
-  buffer_time: 1200
+  expire_time: 604800
+  buffer_time: 86400
 
 db:
   type: postgres

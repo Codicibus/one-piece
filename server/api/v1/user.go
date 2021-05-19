@@ -11,6 +11,14 @@ import (
 	"time"
 )
 
+// Login 用户登录接口
+// @Summary 用户登录接口
+// @Description 用户登录，返回JWT
+// @Tags 用户管理相关接口
+// @Accept json
+// @Param user query model.User true "用户登录信息"
+// @Success 200 object model.User
+// @Router /user/login [post]
 func Login(c *gin.Context) {
 	var L model.User
 	_ = c.ShouldBind(&L)
@@ -20,6 +28,7 @@ func Login(c *gin.Context) {
 	if userRet, err := service2.Login(&user); err != nil {
 		response.FailWithDetailed(nil, "登录失败，用户名不存在或密码错误", c)
 	} else {
+		userRet.Password = ""
 		tokenNext(c, *userRet)
 	}
 }
@@ -37,6 +46,7 @@ func Register(c *gin.Context) {
 		response.FailWithDetailed(nil, "注册用户失败", c)
 		c.Abort()
 	} else {
+		userRet.Password = ""
 		response.OkWithDetailed(userRet, "注册成功", c)
 	}
 

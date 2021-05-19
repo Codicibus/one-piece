@@ -4,18 +4,16 @@ import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"opiece/server/global"
 	"opiece/server/model"
+	"opiece/server/service/response"
 )
 
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.Request.Header.Get("auth-token")
 		if token == "" {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "非法访问或未登录",
-			})
+			response.FailWithDetailed(nil, "非法访问或未登录", c)
 			c.Abort()
 			return
 		}
@@ -24,29 +22,26 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "授权已过期",
-				})
+				response.FailWithDetailed(nil, "token已过期", c)
 				c.Abort()
 				return
 			}
-			c.JSON(http.StatusOK, gin.H {
-				"message": err.Error(),
-			})
+			response.FailWithDetailed(nil, err.Error(), c)
+			c.Abort()
 			return
 		}
-		if claims.Username == "admin"{
-			c.Set("claims", claims)
-			c.Next()
-		}
+		c.Set("claims", claims)
+		c.Next()
 	}
 }
+
 var (
 	TokenExpired     = errors.New("token is expired")
 	TokenNotValidYet = errors.New("token not active yet")
 	TokenMalformed   = errors.New("that's not even a token")
 	TokenInvalid     = errors.New("could not handle this token")
 )
+
 type JWT struct {
 	SigningKey []byte
 }
@@ -63,7 +58,7 @@ func (j *JWT) CreateToken(claims model.CustomClaims) (string, error) {
 }
 
 func (j *JWT) ParseToken(tokenString string) (*model.CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &model.CustomClaims{}, func (token *jwt.Token)(i interface{}, e error) {
+	token, err := jwt.ParseWithClaims(tokenString, &model.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
