@@ -33,6 +33,14 @@ func Login(c *gin.Context) {
 	}
 }
 
+// Register 用户注册接口
+// @Summary 用户注册接口
+// @Description 用户注册
+// @Tags 用户管理相关接口
+// @Accept json
+// @Param user query model.User true "用户注册信息"
+// @Success 200 object model.User
+// @Router /user/register [post]
 func Register(c *gin.Context) {
 	var R model.User
 	_ = c.ShouldBind(&R)

@@ -7,13 +7,17 @@ import (
 	"opiece/server/model"
 )
 
-func UploadImage(image model.PICs) error {
+func UploadImage(image model.PICs) (string, error) {
 	var Image model.PICs
 	err := global.ODB.Where("image_hash = ?", image.ImageHash).First(&Image).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return global.ODB.Create(&image).Error
+			err = global.ODB.Create(&image).Error
+			if err != nil {
+				return "", err
+			}
+			return "/api/image/query?image_hash=" + image.ImageHash, nil
 		}
 	}
-	return errors.New("图片已经存在")
+	return "/api/image/query?image_hash=" + Image.ImageHash, errors.New("图片已经存在")
 }

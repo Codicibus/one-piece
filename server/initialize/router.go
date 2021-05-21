@@ -22,6 +22,7 @@ func Routers() *gin.Engine {
 	{
 		router2.InitArticleRouter(privateRouter)
 		router2.InitUploadRouter(privateRouter)
+		router2.InitImageRouter(privateRouter)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

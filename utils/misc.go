@@ -10,3 +10,7 @@ func (t Target) In(x []string) bool {
 	}
 	return false
 }
+
+func GetBool(s string) bool {
+	return s == "true" || s == "false"
+}

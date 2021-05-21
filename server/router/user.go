@@ -17,5 +17,6 @@ func InitArticleRouter(Router *gin.RouterGroup) {
 	ArticleRouter := Router.Group("article")
 	{
 		ArticleRouter.POST("post_article", v1.PostArticle)
+		ArticleRouter.POST("remove_article", v1.RemoveArticle)
 	}
 }

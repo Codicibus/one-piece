@@ -17,6 +17,8 @@ definitions:
       content:
         example: 你好，世界！
         type: string
+      content_hash:
+        type: string
       title:
         example: 世界，你好！
         type: string
@@ -56,15 +58,55 @@ paths:
         name: auth-token
         required: true
         type: string
-      - description: 文章结构
+      - description: 文章标题
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: 文章内容
+        in: formData
+        name: content
+        required: true
+        type: string
+      - description: 文章hash值，为空则后端计算
+        in: formData
+        name: content_hash
+        type: string
+      - description: 是否显示背景图，默认false，为true时必须选择设置random和pic其中之一
+        in: formData
+        name: background_visible
+        type: boolean
+      - description: 当background_visible为true时
+        in: formData
+        name: background_random
+        type: boolean
+      - description: 当background_visible为true时
+        in: formData
+        name: background_pic
+        type: string
+      produces:
+      - application/json
+      summary: 新增文章接口
+      tags:
+      - 文章管理相关接口
+  /article/remove_article:
+    post:
+      consumes:
+      - application/json
+      description: 文章删除接口 接收一个文章对象
+      parameters:
+      - description: JWT用户令牌
+        in: header
+        name: auth-token
+        required: true
+        type: string
+      - description: 文章对象
         in: body
-        name: object
+        name: file_hash
         required: true
         schema:
           $ref: '#/definitions/model.Article'
-      produces:
-      - application/json
-      summary: 新建文章接口
+      summary: 文章删除接口
       tags:
       - 文章管理相关接口
   /upload/pic:
@@ -110,6 +152,28 @@ paths:
           schema:
             $ref: '#/definitions/model.User'
       summary: 用户登录接口
+      tags:
+      - 用户管理相关接口
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册
+      parameters:
+      - in: query
+        name: password
+        required: true
+        type: string
+      - in: query
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      summary: 用户注册接口
       tags:
       - 用户管理相关接口
 swagger: "2.0"

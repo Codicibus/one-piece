@@ -45,7 +45,7 @@ var doc = `{
                 "tags": [
                     "文章管理相关接口"
                 ],
-                "summary": "新建文章接口",
+                "summary": "新增文章接口",
                 "parameters": [
                     {
                         "type": "string",
@@ -55,8 +55,67 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "文章结构",
-                        "name": "object",
+                        "type": "string",
+                        "description": "文章标题",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "文章内容",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "文章hash值，为空则后端计算",
+                        "name": "content_hash",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "是否显示背景图，默认false，为true时必须选择设置random和pic其中之一",
+                        "name": "background_visible",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "当background_visible为true时",
+                        "name": "background_random",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "当background_visible为true时",
+                        "name": "background_pic",
+                        "in": "formData"
+                    }
+                ]
+            }
+        },
+        "/article/remove_article": {
+            "post": {
+                "description": "文章删除接口 接收一个文章对象",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "文章管理相关接口"
+                ],
+                "summary": "文章删除接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT用户令牌",
+                        "name": "auth-token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "文章对象",
+                        "name": "file_hash",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -133,6 +192,40 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/user/register": {
+            "post": {
+                "description": "用户注册",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户管理相关接口"
+                ],
+                "summary": "用户注册接口",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -158,6 +251,9 @@ var doc = `{
                 "content": {
                     "type": "string",
                     "example": "你好，世界！"
+                },
+                "content_hash": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string",
