@@ -5,11 +5,13 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "opiece/docs"
+	"opiece/server/global"
 	"opiece/server/middleware"
 	router2 "opiece/server/router"
 )
 
 func Routers() *gin.Engine {
+	gin.SetMode(global.OConfig.Gin.Mode)
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())

@@ -122,11 +122,6 @@ func UploadImage(c *gin.Context) {
 func RemoveArticle(c *gin.Context) {
 	body := c.Request.Body
 	force := utils.GetBool(c.Request.PostFormValue("force"))
-	//if err != nil {
-	//	response.FailWithDetailed(nil, err.Error(), c)
-	//	c.Abort()
-	//	return
-	//}
 	var Article model.Article
 	data, err := ioutil.ReadAll(body)
 	if err != nil {

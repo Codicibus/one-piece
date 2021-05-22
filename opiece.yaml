@@ -3,6 +3,9 @@ jwt:
   expire_time: 604800
   buffer_time: 86400
 
+gin:
+  mode: debug
+
 db:
   type: postgres
 
