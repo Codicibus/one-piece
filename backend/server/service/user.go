@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 	"opiece/server/global"
 	"opiece/server/model"
-	"opiece/utils"
+	"opiece/server/utils"
 )
 
 func Register(u model.User) (model.User, error) {
