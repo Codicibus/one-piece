@@ -5,13 +5,14 @@ jwt:
 
 gin:
   mode: debug
+  port: 8081
 
 db:
   type: postgres
 
 postgres:
-  db_host: localhost
-  db_port: 5432
+  db_host: localhost-1
+  db_port: 54321
   db_name: opiecedb
   db_username: opiece
   db_password: postgres

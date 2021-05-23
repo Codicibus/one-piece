@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Gin struct {
 		Mode string `yaml:"mode"`
+		Port string `yaml:"port"`
 	} `yaml:"gin"`
 	JWT struct {
 		SecretKey  string `yaml:"secret_key"`
