@@ -26,6 +26,7 @@ import (
 // @Param background_random formData bool false "当background_visible为true时"
 // @Param background_pic formData string false "当background_visible为true时"
 // @Router /article/post [post]
+// @Response 200 {object} model.Article
 func PostArticle(c *gin.Context) {
 	var A model.Article
 	A.Title = c.Request.FormValue("title")
@@ -79,6 +80,7 @@ func PostArticle(c *gin.Context) {
 // @Param Authorization header string true "JWT用户令牌"
 // @Param file_hash formData string false "图片hash 为空则后端进行计算"
 // @Param local_file formData file true "图片"
+// @success 200 {object} response.MsgResponse{data=string} "成功"
 // @Router /upload/pic [post]
 func UploadImage(c *gin.Context) {
 	var Image model.PICs
@@ -159,7 +161,8 @@ func RemoveArticle(c *gin.Context) {
 // @Tags 文章管理相关接口
 // @Accept json
 // @Param Authorization header string true "JWT用户令牌"
-// @Param file_hash body model.Article true "文章对象"
+// @Param page_size query string false "请求页数"
+// @Param page_size query string false "请求页码"
 // @Router /article/get [get]
 func GetArticle(c *gin.Context) {
 	pageSize := c.GetInt("page_size")

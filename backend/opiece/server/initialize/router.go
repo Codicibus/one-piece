@@ -15,11 +15,11 @@ func Routers() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
-	publicRouter := router.Group("api")
+	publicRouter := router.Group("v1")
 	{
 		router2.InitUserRouter(publicRouter)
 	}
-	privateRouter := router.Group("api")
+	privateRouter := router.Group("v1")
 	privateRouter.Use(middleware.JWTAuthMiddleware())
 	{
 		router2.InitArticleRouter(privateRouter)

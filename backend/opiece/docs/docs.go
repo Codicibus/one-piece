@@ -52,13 +52,16 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "文章对象",
-                        "name": "file_hash",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.Article"
-                        }
+                        "type": "string",
+                        "description": "请求页数",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求页码",
+                        "name": "page_size",
+                        "in": "query"
                     }
                 ]
             }
@@ -122,7 +125,15 @@ var doc = `{
                         "name": "background_pic",
                         "in": "formData"
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Article"
+                        }
+                    }
+                }
             }
         },
         "/article/remove": {
@@ -186,7 +197,27 @@ var doc = `{
                         "in": "formData",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.MsgResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         },
         "/user/login": {
@@ -305,6 +336,20 @@ var doc = `{
                     "type": "string"
                 }
             }
+        },
+        "response.MsgResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
         }
     }
 }`
@@ -321,8 +366,8 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "0.0.1",
-	Host:        "localhost:8080",
-	BasePath:    "/api",
+	Host:        "api.amujun.com",
+	BasePath:    "/v1",
 	Schemes:     []string{},
 	Title:       "OPiece",
 	Description: "博客后台程序REST API接口",

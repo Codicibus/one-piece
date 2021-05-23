@@ -21,3 +21,18 @@ func InitArticleRouter(Router *gin.RouterGroup) {
 		ArticleRouter.GET("get", v1.GetArticle)
 	}
 }
+
+func InitUploadRouter(Router *gin.RouterGroup) {
+	UploadRouter := Router.Group("upload")
+	{
+		UploadRouter.POST("/pic", v1.UploadImage)
+	}
+}
+
+func InitImageRouter(Router *gin.RouterGroup) {
+	ImageRouter := Router.Group("image")
+	{
+		ImageRouter.GET("/random", v1.ImagePool)
+		ImageRouter.GET("/query", v1.GetImage)
+	}
+}

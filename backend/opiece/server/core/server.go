@@ -18,7 +18,7 @@ func RunServer() {
 		defer db.Close()
 	}
 
-	if err := router.Run(); err != nil {
+	if err := router.Run(":"+global.OConfig.Gin.Port); err != nil {
 		panic(err)
 	}
 }

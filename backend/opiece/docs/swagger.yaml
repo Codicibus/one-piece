@@ -1,4 +1,4 @@
-basePath: /api
+basePath: /v1
 definitions:
   model.Article:
     properties:
@@ -33,7 +33,16 @@ definitions:
     - password
     - username
     type: object
-host: localhost:8080
+  response.MsgResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+host: api.amujun.com
 info:
   contact:
     email: support@swagger.io
@@ -58,12 +67,14 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: 文章对象
-        in: body
-        name: file_hash
-        required: true
-        schema:
-          $ref: '#/definitions/model.Article'
+      - description: 请求页数
+        in: query
+        name: page_size
+        type: string
+      - description: 请求页码
+        in: query
+        name: page_size
+        type: string
       summary: 文章获取接口
       tags:
       - 文章管理相关接口
@@ -106,6 +117,11 @@ paths:
         type: string
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Article'
       summary: 新增文章接口
       tags:
       - 文章管理相关接口
@@ -149,6 +165,16 @@ paths:
         name: local_file
         required: true
         type: file
+      responses:
+        "200":
+          description: 成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.MsgResponse'
+            - properties:
+                data:
+                  type: string
+              type: object
       summary: 图片上传接口
       tags:
       - 上传管理相关接口
