@@ -26,6 +26,7 @@ import (
 // @Param background_random formData bool false "当background_visible为true时"
 // @Param background_pic formData string false "当background_visible为true时"
 // @Router /article/post [post]
+// @Response 200 {object} model.Article
 func PostArticle(c *gin.Context) {
 	var A model.Article
 	A.Title = c.Request.FormValue("title")
