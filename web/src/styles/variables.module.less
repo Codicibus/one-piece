@@ -1,0 +1,30 @@
+@primary-color: #1890ff; // 全局主色
+@link-color: #1890ff; // 链接色
+@success-color: #52c41a; // 成功色
+@warning-color: #faad14; // 警告色
+@error-color: #f5222d; // 错误色
+@font-size-base: 14px; // 主字号
+@heading-color: rgba(0, 0, 0, 0.85); // 标题色
+@text-color: rgba(0, 0, 0, 0.65); // 主文本色
+@text-color-secondary: rgba(0, 0, 0, 0.45); // 次文本色
+@disabled-color: rgba(0, 0, 0, 0.25); // 失效色
+@border-radius-base: 4px; // 组件/浮层圆角
+@border-color-base: #d9d9d9; // 边框色
+@box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15); // 浮层阴影
+
+// 导出变量,可以在js中使用
+:export {
+	primaryColor: @menuText; // 全局主色
+	linkColor: @menuActiveText; // 链接色
+	successColor: @subMenuActiveText; // 成功色
+	warningColor: @menuBg; // 警告色
+	errorColor: @menuHover; // 错误色
+	fontSizeBase: @font-size-base; // 主字号
+	headingColor: @heading-color; // 标题色
+	textColor: @text-color; // 主文本色
+	textColorSecondary: @text-color-secondary; // 次文本色
+	disabledColor: @disabled-color; // 失效色
+	borderRadiusBase: @border-radius-base; // 组件/浮层圆角
+	borderColorBase: @border-color-base; // 边框色
+	boxShadowBase: @box-shadow-base; // 浮层阴影
+}
