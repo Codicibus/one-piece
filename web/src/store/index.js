@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-import sidebar from './modules/sidebar'
 import user from './modules/user'
 import getters from './getters'
 
@@ -14,11 +13,11 @@ const mutations = {
 }
 
 const modules = {
-	sidebar,
 	user
 }
 
 export default createStore({
+	strict: import.meta.env.MODE !== 'production',
 	state,
 	getters,
 	mutations,
