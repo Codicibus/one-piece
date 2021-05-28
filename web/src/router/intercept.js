@@ -19,20 +19,12 @@ router.beforeEach((to, from, next) => {
 		NProgress.done()
 		next()
 	} else {
-		// 判断两个分支情况
 		if (token) {
 			NProgress.done()
 			return next()
 		} else {
-			message
-				.alert('token为空,返回登录页', '提示', {
-					confirmButtonText: '确定',
-					type: 'warning'
-				})
-				.then(() => {
-					NProgress.done()
-					next({ path: '/login' })
-				})
+			message.warning('请先登录')
+			next('/login')
 		}
 	}
 })
