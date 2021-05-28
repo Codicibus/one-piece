@@ -2,7 +2,11 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import router from './router'
-import store from './store'
+import '@/router/intercept' // 路由拦截
+
+// import store from './store'
+
+import { createPinia } from 'pinia'
 
 // 引入ant-design-vue
 import Antd from 'ant-design-vue'
@@ -17,7 +21,8 @@ const app = createApp(App)
 app.config.productionTip = false
 
 app.use(router)
-app.use(store)
+// app.use(store)
+app.use(createPinia())
 app.use(Antd)
 app.mount('#app')
 
