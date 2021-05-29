@@ -34,6 +34,11 @@ func GetArticles(pageSize int, pageNum int) ([]*model.Article, error) {
 	return articles, global.ODB.Order("created_at desc").Limit(pageSize).Offset(pageNum).Find(&articles).Error
 }
 
+func GetArticlesByCategory(category string) ([]*model.Article, error) {
+	var articles []*model.Article
+	return articles, global.ODB.Where("category = ?", category).Find(&articles).Error
+}
+
 func GetBackgroundPicByHash(hash string) *model.PICs {
 	var pic model.PICs
 	err := global.ODB.Where("image_hash = ?", hash).First(&pic).Error

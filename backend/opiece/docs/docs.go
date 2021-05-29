@@ -33,7 +33,29 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/article/get": {
+        "/v1/article/category": {
+            "get": {
+                "tags": [
+                    "文章管理相关接口"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "分类名称",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ]
+            }
+        },
+        "/v1/article/get": {
             "get": {
                 "description": "文章获取接口",
                 "consumes": [
@@ -66,7 +88,7 @@ var doc = `{
                 ]
             }
         },
-        "/article/post": {
+        "/v1/article/post": {
             "post": {
                 "description": "按照一定规则新建文章",
                 "consumes": [
@@ -136,7 +158,7 @@ var doc = `{
                 }
             }
         },
-        "/article/remove": {
+        "/v1/article/remove": {
             "post": {
                 "description": "文章删除接口 接收一个文章对象",
                 "consumes": [
@@ -166,7 +188,31 @@ var doc = `{
                 ]
             }
         },
-        "/upload/pic": {
+        "/v1/image/query": {
+            "get": {
+                "tags": [
+                    "图片接口"
+                ],
+                "summary": "根据图片hash获取图片"
+            }
+        },
+        "/v1/image/random": {
+            "get": {
+                "tags": [
+                    "图片接口"
+                ],
+                "summary": "获取随机图片",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.PICs"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/upload/pic": {
             "post": {
                 "description": "图片上传接口 单纯只接收图片",
                 "consumes": [
@@ -220,7 +266,7 @@ var doc = `{
                 }
             }
         },
-        "/user/login": {
+        "/v1/user/login": {
             "post": {
                 "description": "用户登录，返回JWT",
                 "consumes": [
@@ -254,7 +300,7 @@ var doc = `{
                 }
             }
         },
-        "/user/register": {
+        "/v1/user/register": {
             "post": {
                 "description": "用户注册",
                 "consumes": [
@@ -319,6 +365,37 @@ var doc = `{
                 "title": {
                     "type": "string",
                     "example": "世界，你好！"
+                }
+            }
+        },
+        "model.PICs": {
+            "type": "object",
+            "properties": {
+                "image_bin": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "image_hash": {
+                    "type": "string",
+                    "example": "6a7bd4895ed239a4dc257d962da8a3ce"
+                },
+                "image_mime_type": {
+                    "type": "string",
+                    "example": "png"
+                },
+                "image_name": {
+                    "type": "string",
+                    "example": "example.png"
+                },
+                "image_path": {
+                    "type": "string",
+                    "example": "http://exmaple.com/example.png"
+                },
+                "image_size": {
+                    "type": "integer",
+                    "example": 1024
                 }
             }
         },

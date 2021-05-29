@@ -19,7 +19,7 @@ import (
 // @Accept json
 // @Param user query model.User true "用户登录信息"
 // @Success 200 object model.User
-// @Router /user/login [post]
+// @Router /v1/user/login [post]
 func Login(c *gin.Context) {
 	var L model.User
 	_ = c.ShouldBind(&L)
@@ -41,7 +41,7 @@ func Login(c *gin.Context) {
 // @Accept json
 // @Param user query model.User true "用户注册信息"
 // @Success 200 object model.User
-// @Router /user/register [post]
+// @Router /v1/user/register [post]
 func Register(c *gin.Context) {
 	var R model.User
 	_ = c.ShouldBind(&R)

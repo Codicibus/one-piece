@@ -23,6 +23,28 @@ definitions:
         example: 世界，你好！
         type: string
     type: object
+  model.PICs:
+    properties:
+      image_bin:
+        items:
+          type: integer
+        type: array
+      image_hash:
+        example: 6a7bd4895ed239a4dc257d962da8a3ce
+        type: string
+      image_mime_type:
+        example: png
+        type: string
+      image_name:
+        example: example.png
+        type: string
+      image_path:
+        example: http://exmaple.com/example.png
+        type: string
+      image_size:
+        example: 1024
+        type: integer
+    type: object
   model.User:
     properties:
       password:
@@ -56,7 +78,21 @@ info:
   title: OPiece
   version: 0.0.1
 paths:
-  /article/get:
+  /v1/article/category:
+    get:
+      parameters:
+      - description: JWT用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 分类名称
+        in: query
+        name: name
+        type: string
+      tags:
+      - 文章管理相关接口
+  /v1/article/get:
     get:
       consumes:
       - application/json
@@ -78,7 +114,7 @@ paths:
       summary: 文章获取接口
       tags:
       - 文章管理相关接口
-  /article/post:
+  /v1/article/post:
     post:
       consumes:
       - application/json
@@ -125,7 +161,7 @@ paths:
       summary: 新增文章接口
       tags:
       - 文章管理相关接口
-  /article/remove:
+  /v1/article/remove:
     post:
       consumes:
       - application/json
@@ -145,7 +181,22 @@ paths:
       summary: 文章删除接口
       tags:
       - 文章管理相关接口
-  /upload/pic:
+  /v1/image/query:
+    get:
+      summary: 根据图片hash获取图片
+      tags:
+      - 图片接口
+  /v1/image/random:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.PICs'
+      summary: 获取随机图片
+      tags:
+      - 图片接口
+  /v1/upload/pic:
     post:
       consumes:
       - multipart/form-data
@@ -178,7 +229,7 @@ paths:
       summary: 图片上传接口
       tags:
       - 上传管理相关接口
-  /user/login:
+  /v1/user/login:
     post:
       consumes:
       - application/json
@@ -200,7 +251,7 @@ paths:
       summary: 用户登录接口
       tags:
       - 用户管理相关接口
-  /user/register:
+  /v1/user/register:
     post:
       consumes:
       - application/json

@@ -13,7 +13,6 @@ func RunServer() {
 	router := initialize.Routers()
 	if global.ODB != nil {
 		initialize.MigrateTables(global.ODB)
-		// TODO: close the db connection
 		db, _ := global.ODB.DB()
 		defer db.Close()
 	}

@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
-	"opiece/server/global"
 	"opiece/server/middleware"
 	"opiece/server/model"
 	"opiece/server/service"
 	"opiece/server/service/response"
 	"opiece/server/utils"
+	"strconv"
 )
 
 // PostArticle 新增文章接口
@@ -25,7 +25,7 @@ import (
 // @Param background_visible formData bool false "是否显示背景图，默认false，为true时必须选择设置random和pic其中之一"
 // @Param background_random formData bool false "当background_visible为true时"
 // @Param background_pic formData string false "当background_visible为true时"
-// @Router /article/post [post]
+// @Router /v1/article/post [post]
 // @Response 200 {object} model.Article
 func PostArticle(c *gin.Context) {
 	var A model.Article
@@ -72,56 +72,6 @@ func PostArticle(c *gin.Context) {
 	}
 }
 
-// UploadImage 图片上传接口
-// @Summary 图片上传接口
-// @Description 图片上传接口 单纯只接收图片
-// @Tags 上传管理相关接口
-// @Accept mpfd
-// @Param Authorization header string true "JWT用户令牌"
-// @Param file_hash formData string false "图片hash 为空则后端进行计算"
-// @Param local_file formData file true "图片"
-// @success 200 {object} response.MsgResponse{data=string} "成功"
-// @Router /upload/pic [post]
-func UploadImage(c *gin.Context) {
-	var Image model.PICs
-	fileHash := c.Request.FormValue("file_hash")
-	file, header, err := c.Request.FormFile("local_file")
-	if err != nil {
-		response.FailWithDetailed(nil, "文件有误: "+err.Error(), c)
-		c.Abort()
-		return
-	}
-	mime := header.Header.Get("Content-Type")
-	if !utils.Target(mime).In(global.MIMEImages) {
-		response.FailWithDetailed(nil, "不支持的文件类型", c)
-		c.Abort()
-		return
-	}
-	Image.ImageMIMEType = mime
-	Image.ImageSize = header.Size
-	Image.ImageName = header.Filename
-	Image.ImageBin, err = ioutil.ReadAll(file)
-	if err != nil {
-		response.FailWithDetailed(nil, "读取文件错误: "+err.Error(), c)
-		c.Abort()
-		return
-	}
-	Image.ImageHash = fileHash
-	if Image.ImageHash == "" {
-		Image.ImageHash = utils.MD5(Image.ImageBin)
-	}
-	Image.ImagePath = "binary"
-	imageURI, err := service.UploadImage(Image)
-	if err != nil && imageURI == "" {
-		response.FailWithDetailed(nil, "上传图片失败: "+err.Error(), c)
-		c.Abort()
-		return
-	} else if err != nil {
-		response.OkWithDetailed(imageURI, err.Error(), c)
-	} else {
-		response.OkWithDetailed(imageURI, "图片上传成功！", c)
-	}
-}
 
 // RemoveArticle 文章删除接口
 // @Summary 文章删除接口
@@ -130,7 +80,7 @@ func UploadImage(c *gin.Context) {
 // @Accept json
 // @Param Authorization header string true "JWT用户令牌"
 // @Param article body model.Article true "文章对象"
-// @Router /article/remove [post]
+// @Router /v1/article/remove [post]
 func RemoveArticle(c *gin.Context) {
 	body := c.Request.Body
 	var Article model.Article
@@ -163,10 +113,10 @@ func RemoveArticle(c *gin.Context) {
 // @Param Authorization header string true "JWT用户令牌"
 // @Param page_size query string false "请求页数"
 // @Param page_size query string false "请求页码"
-// @Router /article/get [get]
+// @Router /v1/article/get [get]
 func GetArticle(c *gin.Context) {
-	pageSize := c.GetInt("page_size")
-	pageNum := c.GetInt("page_num")
+	pageSize, _ := strconv.Atoi(c.Query("page_size"))
+	pageNum, _  := strconv.Atoi(c.Query("page_num"))
 	if pageSize == 0 {
 		pageSize = 10
 	}
@@ -185,4 +135,25 @@ func GetArticle(c *gin.Context) {
 		"total":     len(articles),
 		"articles":  articles,
 	}, "操作成功！", c)
+}
+
+// GetArticleByCategory 按分类获取文章
+// @Tags 文章管理相关接口
+// @Param Authorization header string true "JWT用户令牌"
+// @Param name query string false "分类名称"
+// @Router /v1/article/category [get]
+func GetArticleByCategory(c *gin.Context) {
+	category := c.Query("name")
+	if category == "" {
+		response.FailWithDetailed(nil, "缺少category参数", c)
+		c.Abort()
+		return
+	}
+	articles , err := service.GetArticlesByCategory(category)
+	if err != nil {
+		response.FailWithDetailed(articles, "获取文章失败: "+ err.Error(), c)
+		c.Abort()
+		return
+	}
+	response.OkWithDetailed(articles, "操作成功", c)
 }
