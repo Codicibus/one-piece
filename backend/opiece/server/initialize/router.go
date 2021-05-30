@@ -18,6 +18,7 @@ func Routers() *gin.Engine {
 	publicRouter := router.Group("v1")
 	{
 		router2.InitUserRouter(publicRouter)
+		router2.InitDashboardRouter(publicRouter)
 	}
 	privateRouter := router.Group("v1")
 	privateRouter.Use(middleware.JWTAuthMiddleware())

@@ -153,11 +153,6 @@ paths:
         type: string
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Article'
       summary: 新增文章接口
       tags:
       - 文章管理相关接口

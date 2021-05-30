@@ -147,15 +147,7 @@ var doc = `{
                         "name": "background_pic",
                         "in": "formData"
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Article"
-                        }
-                    }
-                }
+                ]
             }
         },
         "/v1/article/remove": {

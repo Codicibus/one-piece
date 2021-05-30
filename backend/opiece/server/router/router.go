@@ -37,3 +37,10 @@ func InitImageRouter(Router *gin.RouterGroup) {
 		ImageRouter.GET("/query", v1.GetImage)
 	}
 }
+
+func InitDashboardRouter(Router *gin.RouterGroup) {
+	DashboardRouter := Router.Group("dashboard")
+	{
+		DashboardRouter.GET("/systat", v1.GetSysStat)
+	}
+}

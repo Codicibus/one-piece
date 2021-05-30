@@ -72,7 +72,6 @@ func PostArticle(c *gin.Context) {
 	}
 }
 
-
 // RemoveArticle 文章删除接口
 // @Summary 文章删除接口
 // @Description 文章删除接口 接收一个文章对象
