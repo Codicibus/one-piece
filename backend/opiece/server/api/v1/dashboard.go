@@ -10,6 +10,36 @@ import (
 	"time"
 )
 
+func GetArticleStat(c *gin.Context) {
+	upgrader := websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+				return true
+		},
+	}
+	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		response.Fail(c)
+		return
+	}
+	defer conn.Close()
+	for {
+		count, err := service.GetAllArticlesCount()
+		if err != nil {
+			_ = conn.WriteMessage(websocket.TextMessage, []byte(err.Error()))
+			continue
+		}
+		data, err := json.Marshal(map[string]int64{
+			"article_count": count,
+		})
+		if err != nil {
+			_ = conn.WriteMessage(websocket.TextMessage, []byte("数据序列化失败"))
+			continue
+		}
+		_ = conn.WriteMessage(websocket.TextMessage, data)
+		time.Sleep(time.Second*10)
+	}
+}
+
 func GetSysStat(c *gin.Context) {
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {

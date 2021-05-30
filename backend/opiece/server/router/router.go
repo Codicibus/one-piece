@@ -42,5 +42,6 @@ func InitDashboardRouter(Router *gin.RouterGroup) {
 	DashboardRouter := Router.Group("dashboard")
 	{
 		DashboardRouter.GET("/systat", v1.GetSysStat)
+		DashboardRouter.GET("/article_count", v1.GetArticleStat)
 	}
 }

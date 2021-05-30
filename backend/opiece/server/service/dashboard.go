@@ -4,6 +4,8 @@ import (
 	cpu "github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
 	sysnet "github.com/shirou/gopsutil/v3/net"
+	"opiece/server/global"
+	"opiece/server/model"
 	"time"
 )
 
@@ -33,4 +35,10 @@ func GetNetStat() []sysnet.IOCountersStat{
 		panic(err)
 	}
 	return stat
+}
+
+func GetAllArticlesCount() (int64, error) {
+	var count int64
+	err := global.ODB.Model(&model.Article{}).Count(&count).Error
+	return count, err
 }
