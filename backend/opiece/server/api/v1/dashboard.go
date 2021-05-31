@@ -4,23 +4,12 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"net/http"
 	"opiece/server/service"
-	"opiece/server/service/response"
 	"time"
 )
 
 func GetArticleStat(c *gin.Context) {
-	upgrader := websocket.Upgrader{
-		CheckOrigin: func(r *http.Request) bool {
-				return true
-		},
-	}
-	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		response.Fail(c)
-		return
-	}
+	conn := service.NewWSUpgrader(c)
 	defer conn.Close()
 	for {
 		count, err := service.GetAllArticlesCount()
@@ -41,16 +30,7 @@ func GetArticleStat(c *gin.Context) {
 }
 
 func GetSysStat(c *gin.Context) {
-	upgrader := websocket.Upgrader{
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	}
-	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		response.Fail(c)
-		return
-	}
+ 	conn := service.NewWSUpgrader(c)
 	defer conn.Close()
 	for {
 		cpuPercent := service.GetCpuPercent()
