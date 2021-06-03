@@ -8,6 +8,13 @@ import (
 	"time"
 )
 
+
+// GetArticleStat
+// @Description 每x秒获取一次文章状态 该接口是ws协议
+// @Tags dashboard
+// @accept application/json
+// @Produce application/json
+// @Router /v1/dashboard/article_count [get]
 func GetArticleStat(c *gin.Context) {
 	conn := service.NewWSUpgrader(c)
 	defer conn.Close()
@@ -29,6 +36,14 @@ func GetArticleStat(c *gin.Context) {
 	}
 }
 
+
+
+// GetSysStat
+// @Description 每x秒获取一次系统信息，该接口是ws协议
+// @Tags GetSysStat
+// @accept application/json
+// @Produce application/json
+// @Router /v1/dashboard/systat [get]
 func GetSysStat(c *gin.Context) {
  	conn := service.NewWSUpgrader(c)
 	defer conn.Close()
