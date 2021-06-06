@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import usePluginImport from 'vite-plugin-importer'
 import { resolve } from 'path'
 
-// https://vitejs.dev/config/
 export default defineConfig({
 	base: '/',
 	resolve: {
@@ -12,5 +12,12 @@ export default defineConfig({
 			'@article': resolve(__dirname, 'src/pages/admin/article')
 		}
 	},
-	plugins: [vue()]
+	plugins: [
+		vue(),
+		usePluginImport({
+			libraryName: 'ant-design-vue',
+			libraryDirectory: 'es',
+			style: 'css'
+		})
+	]
 })
