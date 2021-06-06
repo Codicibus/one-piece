@@ -10,22 +10,20 @@ NProgress.configure({ showSpinner: true })
 const isExt = path => /https|www/.test(path)
 
 router.beforeEach((to, from, next) => {
-	// 阻止外链跳转在路由中跳转
-	if (isExt(to.path)) return next(from.path)
 	// 开始进度条
 	NProgress.start()
+	// 阻止外链跳转在路由中跳转
+	if (isExt(to.path)) return next(from.path)
+	// 提示NotFound
+	if (to.name === 'NotFound') return next()
 	const token = getToken()
-	if (to.path === '/login') {
+	if (to.path === '/login' || to.path === '/') {
 		NProgress.done()
 		next()
 	} else {
-		if (token) {
-			NProgress.done()
-			return next()
-		} else {
-			message.warning('请先登录')
-			next('/login')
-		}
+		if (token) return next()
+		message.warning('请先登录')
+		next('/login')
 	}
 })
 
