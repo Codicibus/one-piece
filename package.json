@@ -8,9 +8,12 @@
   },
   "dependencies": {
     "ant-design-vue": "^2.1.6",
+    "axios": "^0.21.1",
     "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.0-alpha.19",
+    "qs": "^6.10.1",
+    "vite-plugin-importer": "^0.2.1",
     "vue": "^3.0.5",
     "vue-router": "^4.0.8",
     "vuex": "^4.0.0"
