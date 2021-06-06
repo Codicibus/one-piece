@@ -1,8 +1,9 @@
 import Layout from '@/layouts/index.vue'
 import home from '@/pages/home/index.vue'
-import dashboard from '@/pages/admin/dashboard/index.vue'
+import NotFound from '@/pages/404.vue'
 
 const routes = [
+	{ path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 	{ path: '/', component: home },
 	{
 		name: 'Login',
@@ -18,7 +19,7 @@ const routes = [
 				name: 'Dashboard',
 				path: 'dashboard',
 				// hidden: true, // 是否展示该路由
-				component: dashboard,
+				component: () => import('@/pages/admin/dashboard/index.vue'),
 				meta: {
 					title: '仪表盘',
 					icon: 'el-icon-s-home'
