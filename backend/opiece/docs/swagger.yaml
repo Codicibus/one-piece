@@ -176,6 +176,24 @@ paths:
       summary: 文章删除接口
       tags:
       - 文章管理相关接口
+  /v1/dashboard/article_count:
+    get:
+      consumes:
+      - application/json
+      description: 每x秒获取一次文章状态 该接口是ws协议
+      produces:
+      - application/json
+      tags:
+      - dashboard
+  /v1/dashboard/systat:
+    get:
+      consumes:
+      - application/json
+      description: 每x秒获取一次系统信息，该接口是ws协议
+      produces:
+      - application/json
+      tags:
+      - GetSysStat
   /v1/image/query:
     get:
       summary: 根据图片hash获取图片
