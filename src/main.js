@@ -17,7 +17,6 @@ app.use(router)
 app.use(pinia)
 app.use(Antd)
 app.mount('#app')
-
 if (import.meta.env.MODE === 'production') {
 	console.log('当前是生产环境')
 } else {
