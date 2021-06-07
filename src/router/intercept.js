@@ -17,11 +17,15 @@ router.beforeEach((to, from, next) => {
 	// 提示NotFound
 	if (to.name === 'NotFound') return next()
 	const token = getToken()
-	if (to.path === '/login' || to.path === '/') {
-		NProgress.done()
-		next()
+
+	if (token) {
+		if (to.path === '/login') {
+			message.warning('已登录')
+			return next('/admin')
+		}
+		return next()
 	} else {
-		if (token) return next()
+		if (to.path === '/') next()
 		message.warning('请先登录')
 		next('/login')
 	}
