@@ -1,3 +1,3 @@
-<template>404</template>
+<template>NotFound</template>
 <script></script>
 <style lang="less"></style>
