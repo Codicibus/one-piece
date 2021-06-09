@@ -5,9 +5,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"opiece/server/service"
+	"opiece/server/service/response"
 	"time"
 )
 
+func GetArticleStatHttp(c *gin.Context) {
+	count, err := service.GetAllArticlesCount()
+	if err != nil {
+		response.FailWithDetailed(count, "操作失败: "+ err.Error(), c)
+		c.Abort()
+		return
+	}
+	response.OkWithDetailed(map[string]int64{"article_count": count}, "操作成功!", c)
+}
 
 // GetArticleStat
 // @Description 每x秒获取一次文章状态 该接口是ws协议

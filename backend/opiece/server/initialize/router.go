@@ -29,7 +29,6 @@ func Routers() *gin.Engine {
 	publicRouter := router.Group("v1")
 	{
 		router2.InitUserRouter(publicRouter)
-		router2.InitDashboardRouter(publicRouter)
 	}
 	privateRouter := router.Group("v1")
 	privateRouter.Use(middleware.JWTAuthMiddleware())
@@ -37,6 +36,7 @@ func Routers() *gin.Engine {
 		router2.InitArticleRouter(privateRouter)
 		router2.InitUploadRouter(privateRouter)
 		router2.InitImageRouter(privateRouter)
+		router2.InitDashboardRouter(privateRouter)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

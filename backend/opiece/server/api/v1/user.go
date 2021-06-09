@@ -21,6 +21,7 @@ import (
 // @Success 200 object model.User
 // @Router /v1/user/login [post]
 func Login(c *gin.Context) {
+	//c.SetCookie("", "", 0, "", "", true, true)
 	var L model.User
 	_ = c.ShouldBind(&L)
 	var user model.User
