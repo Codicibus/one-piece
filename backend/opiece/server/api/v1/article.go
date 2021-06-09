@@ -2,6 +2,8 @@ package v1
 
 import (
 	"encoding/json"
+	"errors"
+	"github.com/gabriel-vasile/mimetype"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"opiece/server/middleware"
@@ -10,6 +12,7 @@ import (
 	"opiece/server/service/response"
 	"opiece/server/utils"
 	"strconv"
+	"strings"
 )
 
 // PostArticle 新增文章接口
@@ -115,7 +118,7 @@ func RemoveArticle(c *gin.Context) {
 // @Router /v1/article/get [get]
 func GetArticle(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("page_size"))
-	pageNum, _  := strconv.Atoi(c.Query("page_num"))
+	pageNum, _ := strconv.Atoi(c.Query("page_num"))
 	if pageSize == 0 {
 		pageSize = 10
 	}
@@ -148,11 +151,64 @@ func GetArticleByCategory(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	articles , err := service.GetArticlesByCategory(category)
+	articles, err := service.GetArticlesByCategory(category)
 	if err != nil {
-		response.FailWithDetailed(articles, "获取文章失败: "+ err.Error(), c)
+		response.FailWithDetailed(articles, "获取文章失败: "+err.Error(), c)
 		c.Abort()
 		return
 	}
 	response.OkWithDetailed(articles, "操作成功", c)
+}
+
+// ImportArticleFromFile
+// 从前端表单接收多个文件，并读取内容加以处理存入数据库
+func ImportArticleFromFile(c *gin.Context) {
+	form, err := c.MultipartForm()
+	if err != nil {
+		response.FailWithDetailed(form, "操作失败: "+err.Error(), c)
+		c.Abort()
+		return
+	}
+	var bf model.BinaryFile
+	failed := make([]map[string]string, 0)
+	for _, file := range form.File {
+		for _, f := range file {
+			fd, err := f.Open()
+			if err != nil {
+				failed = append(failed, map[string]string{
+					"file_name": f.Filename,
+					"msg":       err.Error(),
+				})
+				response.FailWithDetailed(nil, "操作失败: "+err.Error(), c)
+				continue
+			}
+			data, _ := ioutil.ReadAll(fd)
+			bf.FileName = f.Filename
+			bf.FileSize = int(f.Size)
+			bf.FileData = data
+			bf.FileHash = utils.MD5(data)
+			mtype := mimetype.Detect(data)
+			if !strings.Contains(mtype.String(), "text/plain") {
+				failed = append(failed, map[string]string{
+					"file_name": f.Filename,
+					"msg":       errors.New("非法文件类型").Error(),
+				})
+				continue
+			}
+			err = service.UploadBinaryFile(bf)
+			if err != nil {
+				failed = append(failed, map[string]string{
+					"file_name": f.Filename,
+					"msg":       err.Error(),
+				})
+				response.FailWithDetailed(nil, "上传文件失败: "+err.Error(), c)
+				continue
+			}
+		}
+	}
+	if len(failed) != 0 {
+		response.FailWithDetailed(failed, "操作有错误", c)
+		return
+	}
+	response.Ok(c)
 }

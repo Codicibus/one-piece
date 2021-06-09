@@ -13,6 +13,3 @@ type PICs struct {
 	ImageBin      []byte `gorm:"image_bin" json:"image_bin" gorm:"comment:图片二进制内容"`
 }
 
-//func (p *PICs) Write(p []byte) (n int, err error) {
-//
-//}

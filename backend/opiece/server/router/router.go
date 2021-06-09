@@ -20,6 +20,7 @@ func InitArticleRouter(Router *gin.RouterGroup) {
 		ArticleRouter.POST("remove", v1.RemoveArticle)
 		ArticleRouter.GET("get", v1.GetArticle)
 		ArticleRouter.GET("category", v1.GetArticleByCategory)
+		ArticleRouter.POST("import_files", v1.ImportArticleFromFile)
 	}
 }
 
