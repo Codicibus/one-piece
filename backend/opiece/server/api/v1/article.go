@@ -181,7 +181,6 @@ func ImportArticleFromFile(c *gin.Context) {
 			fd, err := f.Open()
 			if err != nil {
 				failed = append(failed, genMsg(f.Filename, err.Error()))
-				response.FailWithDetailed(nil, "操作失败: "+err.Error(), c)
 				continue
 			}
 			data, _ := ioutil.ReadAll(fd)
@@ -197,7 +196,6 @@ func ImportArticleFromFile(c *gin.Context) {
 			err = service.UploadBinaryFile(bf)
 			if err != nil {
 				failed = append(failed, genMsg(f.Filename, err.Error()))
-				response.FailWithDetailed(nil, "上传文件失败: "+err.Error(), c)
 				continue
 			}
 		}
