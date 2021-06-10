@@ -2,7 +2,6 @@ package v1
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -169,16 +168,19 @@ func ImportArticleFromFile(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	genMsg := func(filename, msg string) map[string]string {
+		return map[string]string{
+			"file_name": filename,
+			"msg":       msg,
+		}
+	}
 	var bf model.BinaryFile
 	failed := make([]map[string]string, 0)
 	for _, file := range form.File {
 		for _, f := range file {
 			fd, err := f.Open()
 			if err != nil {
-				failed = append(failed, map[string]string{
-					"file_name": f.Filename,
-					"msg":       err.Error(),
-				})
+				failed = append(failed, genMsg(f.Filename, err.Error()))
 				response.FailWithDetailed(nil, "操作失败: "+err.Error(), c)
 				continue
 			}
@@ -189,18 +191,12 @@ func ImportArticleFromFile(c *gin.Context) {
 			bf.FileHash = utils.MD5(data)
 			mtype := mimetype.Detect(data)
 			if !strings.Contains(mtype.String(), "text/plain") {
-				failed = append(failed, map[string]string{
-					"file_name": f.Filename,
-					"msg":       errors.New("非法文件类型").Error(),
-				})
+				failed = append(failed, genMsg(f.Filename, "非法文件类型"))
 				continue
 			}
 			err = service.UploadBinaryFile(bf)
 			if err != nil {
-				failed = append(failed, map[string]string{
-					"file_name": f.Filename,
-					"msg":       err.Error(),
-				})
+				failed = append(failed, genMsg(f.Filename, err.Error()))
 				response.FailWithDetailed(nil, "上传文件失败: "+err.Error(), c)
 				continue
 			}
