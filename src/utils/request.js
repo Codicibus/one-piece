@@ -20,9 +20,8 @@ const request = axios.create({
 request.interceptors.request.use(
 	config => {
 		NProgress.start()
-		if (config.url !== '/v1/user/login') {
-			config.headers['Authorization'] = getToken()
-		}
+		config.url !== '/v1/user/login' &&
+			(config.headers['Authorization'] = getToken())
 		return config
 	},
 	error => {
