@@ -9,9 +9,18 @@
 	</a-layout>
 </template>
 
-<script setup>
+<script>
 import layoutHeader from './components/layoutHeader/index.vue'
 import layoutSidebar from './components/layoutSidebar/index.vue'
 import layoutMain from './components/layoutMain/index.vue'
 import layoutFooter from './components/layoutFooter/index.vue'
+import { defineComponent } from '@vue/runtime-core'
+export default defineComponent({
+	components: {
+		layoutHeader,
+		layoutSidebar,
+		layoutMain,
+		layoutFooter
+	}
+})
 </script>
