@@ -11,7 +11,12 @@ import (
 
 func JWTAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.Request.Header.Get("Authorization")
+		var token string
+		if c.Request.Header.Get("Connection") == "Upgrade" {
+			token = c.Request.Header.Get("Sec-WebSocket-Protocol")
+		} else {
+			token = c.Request.Header.Get("Authorization")
+		}
 		if token == "" {
 			response.FailWithDetailed(nil, "非法访问或未登录", c)
 			c.Abort()

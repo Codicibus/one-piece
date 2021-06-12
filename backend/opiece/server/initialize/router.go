@@ -19,12 +19,12 @@ func Routers() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Use(cors.New(
 		cors.Config{
-			AllowAllOrigins: true,
+			AllowAllOrigins:  true,
 			AllowCredentials: true,
 			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST"},
 			AllowHeaders:     []string{"Origin"},
 			ExposeHeaders:    []string{"Content-Length"},
-			MaxAge: 12 * time.Hour,
+			MaxAge:           12 * time.Hour,
 		}))
 	publicRouter := router.Group("v1")
 	{
