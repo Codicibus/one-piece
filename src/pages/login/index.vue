@@ -30,7 +30,7 @@
 					type="primary"
 					@click="onSubmit"
 					block
-					:loading="loginStore.loading"
+					v-model:loading="store.loading"
 				>
 					登录
 				</a-button>
@@ -43,21 +43,23 @@ import { defineComponent, reactive, toRaw } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import useStore from '@/store'
-import { getToken, removeToken } from '@/utils/auth'
+import useLoginStore from './store'
+
 export default defineComponent({
 	components: { UserOutlined, LockOutlined },
 	setup() {
-		const loginStore = useStore()
+		const loginStore = useLoginStore()
+		const store = useStore()
 		const router = useRouter()
 		const formState = reactive({ username: '', password: '' })
 		const formData = toRaw(formState)
-		const token = getToken()
-		const onSubmit = () => {
-			loginStore.userLogin(formData)
-			if (!token) return removeToken()
-			router.push('/admin')
+		const onSubmit = async () => {
+			store.$state = { loading: true }
+			await loginStore.userLogin(formData)
+			await router.push('/admin/dashboard')
+			store.$state = { loading: false }
 		}
-		return { formState, onSubmit, loginStore }
+		return { formState, onSubmit, store, loginStore }
 	}
 })
 </script>

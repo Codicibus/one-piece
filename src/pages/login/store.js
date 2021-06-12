@@ -1,17 +1,21 @@
 import request from '@/utils/request'
 import { setToken } from '@/utils/auth'
-
-const loginStore = {
+// import translate from '@/utils/translate'
+import { defineStore } from 'pinia'
+export default defineStore({
 	id: 'login',
-	state: () => ({
-		loading: false
-	}),
+	state: () => ({}),
 	getters: {},
 	actions: {
-		userLogin: async formData => {
-			const { token } = await request.post('/v1/user/login', formData)
-			setToken(token)
+		async userLogin(formData) {
+			try {
+				const { token } = await request.post('/v1/user/login', formData)
+				setToken(token)
+			} catch (error) {
+				console.error(error.message)
+				// const data = await translate(error.message)
+				// console.log(data)
+			}
 		}
 	}
-}
-export default loginStore
+})
