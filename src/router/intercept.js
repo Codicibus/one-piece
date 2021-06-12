@@ -1,11 +1,11 @@
 import router from './index'
 import { getToken } from '@/utils/auth'
-import { message } from 'ant-design-vue'
+// import { message } from 'ant-design-vue'
 
 // 进度条
 import NProgress from 'nprogress'
 // NProgress配置右上角loading样式,默认为true
-NProgress.configure({ showSpinner: true })
+NProgress.configure({ showSpinner: false })
 
 const isExt = path => /https|www/.test(path)
 
@@ -19,19 +19,14 @@ router.beforeEach((to, from, next) => {
 	const token = getToken()
 
 	if (token) {
-		if (to.path === '/login') {
-			message.warning('已登录')
-			return next('/admin')
-		}
-		return next()
+		if (to.path === '/login') return next(from.path)
+		next()
 	} else {
-		if (to.path === '/') next()
-		message.warning('请先登录')
-		next('/login')
+		if (to.path.indexOf('/admin') !== -1) {
+			return next('/login')
+		}
+		next()
 	}
 })
 
-router.afterEach(() => {
-	// 完成进度条
-	NProgress.done()
-})
+router.afterEach(() => NProgress.done())
