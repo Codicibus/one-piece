@@ -1,7 +1,14 @@
 <template>
 	<a-layout-sider v-model:inline-collapsed="collapsed" collapsible>
-		<a-menu theme="dark" v-model:selectedKeys="selectedKeys" mode="inline">
-			<div class="logo" />
+		<a-menu
+			theme="dark"
+			v-model:selectedKeys="selectedKeys"
+			v-model:openKeys="openKeys"
+			mode="inline"
+		>
+			<h2 class="logo" ellipsis>
+				<router-link to="/admin/dashboard">ONE PIECE</router-link>
+			</h2>
 			<!-- 仪表盘 -->
 			<a-menu-item key="1">
 				<router-link :to="{ name: 'Dashboard' }">
@@ -40,24 +47,29 @@
 		</a-menu>
 	</a-layout-sider>
 </template>
-<script setup>
-import { PieChartOutlined, UserOutlined } from '@ant-design/icons-vue'
+
+<script>
 import { defineComponent, ref } from 'vue'
-
-const selectedKeys = ref(['1'])
-const collapsed = ref(false)
-
-defineComponent({
+import { PieChartOutlined, UserOutlined } from '@ant-design/icons-vue'
+export default defineComponent({
 	components: {
 		PieChartOutlined,
 		UserOutlined
+	},
+	setup() {
+		const selectedKeys = ref(['1'])
+		const collapsed = ref(false)
+		const openKeys = ref(['sub1'])
+		return { selectedKeys, collapsed, openKeys }
 	}
 })
 </script>
+
 <style lang="less" scope>
 .logo {
-	height: 32px;
-	margin: 16px;
-	background: rgba(255, 255, 255, 0.3);
+	margin: 35px auto;
+	// margin-top: 0.5em;
+	color: white;
+	text-align: center;
 }
 </style>
