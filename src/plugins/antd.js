@@ -13,9 +13,18 @@ import {
 	Row,
 	Col,
 	Progress,
-	Breadcrumb
+	Breadcrumb,
+	Divider,
+	Avatar,
+	Dropdown,
+	Table,
+	Space,
+	Tag,
+	Drawer,
+	Select,
+	Switch,
+	Upload
 } from 'ant-design-vue'
-
 // 导入
 export default app => {
 	app.use(Typography)
@@ -32,4 +41,14 @@ export default app => {
 	app.use(Col)
 	app.use(Progress)
 	app.use(Breadcrumb)
+	app.use(Divider)
+	app.use(Avatar)
+	app.use(Dropdown)
+	app.use(Table)
+	app.use(Space)
+	app.use(Tag)
+	app.use(Drawer)
+	app.use(Select)
+	app.use(Switch)
+	app.use(Upload)
 }
