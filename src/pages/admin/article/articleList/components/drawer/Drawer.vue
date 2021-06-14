@@ -40,7 +40,9 @@
 					<a-form-item label="文章背景图">
 						<a-switch
 							v-model:checked="form.fixedState"
-							@change="!form.fixedState && (form.randomState = false)"
+							@change="
+								!form.fixedState && (form.randomState = false)
+							"
 						/>
 					</a-form-item>
 				</a-col>
@@ -60,9 +62,7 @@
 							:action="uploadURL"
 							list-type="picture"
 							name="local_file"
-							:headers="{
-								Authorization: getToken()
-							}"
+							:headers="{ Authorization: getToken() }"
 							v-model:file-list="form.fileList"
 							@change="handleChange"
 						>
