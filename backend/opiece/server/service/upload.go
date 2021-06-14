@@ -15,7 +15,7 @@ func UploadBinaryFile(BinaryFile model.BinaryFile) error {
 			// TODO insert the record into database
 			err = global.ODB.Create(&BinaryFile).Error
 			if err != nil {
-				return  err
+				return err
 			}
 			return nil
 		}
@@ -32,8 +32,8 @@ func UploadImage(image model.PICs) (string, error) {
 			if err != nil {
 				return "", err
 			}
-			return "/api/image/query?image_hash=" + image.ImageHash, nil
+			return image.ImageHash, nil
 		}
 	}
-	return "/api/image/query?image_hash=" + Image.ImageHash, errors.New("图片已经存在")
+	return Image.ImageHash, errors.New("图片已经存在")
 }
