@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import { getToken } from './auth'
+import translate from './translate'
 import { message } from 'ant-design-vue'
 import NProgress from 'nprogress'
 
@@ -44,15 +45,13 @@ request.interceptors.response.use(
 			case 7:
 				message.error(msg || '错误')
 				return res
-			default:
-				message.error(msg || '错误')
-				return Promise.reject(new Error(msg || '错误'))
 		}
 	},
-	error => {
+	async error => {
 		NProgress.done()
-		console.error('err' + error) // for debug
-		message.error(error || '错误')
+		// 翻译错误信息
+		const data = await translate(error.message)
+		message.error(data || '错误')
 		return Promise.reject(error)
 	}
 )
