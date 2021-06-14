@@ -1,9 +1,13 @@
-const dashboardStore = {
+import request from '@/utils/request'
+import { setToken } from '@/utils/auth'
+// import translate from '@/utils/translate'
+import { defineStore } from 'pinia'
+
+export default defineStore({
 	id: 'dashboard',
 	state: () => ({
-		name: 'tom'
+		loading: false
 	}),
-	computed: {},
+	getters: {},
 	actions: {}
-}
-export default dashboardStore
+})

@@ -23,7 +23,8 @@ import {
 	Drawer,
 	Select,
 	Switch,
-	Upload
+	Upload,
+	Popconfirm
 } from 'ant-design-vue'
 // 导入
 export default app => {
@@ -51,4 +52,5 @@ export default app => {
 	app.use(Select)
 	app.use(Switch)
 	app.use(Upload)
+	app.use(Popconfirm)
 }

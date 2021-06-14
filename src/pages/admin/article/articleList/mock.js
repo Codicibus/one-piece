@@ -46,16 +46,19 @@ export const columns = [
 ]
 export const dataSource = [
 	{
+		id: 1,
 		title: '1',
 		classify: 'John Brown',
 		time: 18
 	},
 	{
+		id: 2,
 		title: '2',
 		classify: 'John Brown',
 		time: 32
 	},
 	{
+		id: 3,
 		title: '3',
 		classify: 'John Brown',
 		time: 32

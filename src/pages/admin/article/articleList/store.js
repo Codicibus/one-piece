@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import { setToken } from '@/utils/auth'
-// import translate from '@/utils/translate'
 import { defineStore } from 'pinia'
 
 export default defineStore({
@@ -8,6 +7,7 @@ export default defineStore({
 	state: () => ({
 		visible: false,
 		loading: false,
+		selectedRows: [],
 		form: {
 			articleTitle: '',
 			articleClassify: {},
