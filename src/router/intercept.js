@@ -1,7 +1,5 @@
 import router from './index'
 import { getToken } from '@/utils/auth'
-// import { message } from 'ant-design-vue'
-
 // 进度条
 import NProgress from 'nprogress'
 // NProgress配置右上角loading样式,默认为true
@@ -17,14 +15,11 @@ router.beforeEach((to, from, next) => {
 	// 提示NotFound
 	if (to.name === 'NotFound') return next()
 	const token = getToken()
-
 	if (token) {
 		if (to.path === '/login') return next(from.path)
 		next()
 	} else {
-		if (to.path.indexOf('/admin') !== -1) {
-			return next('/login')
-		}
+		if (to.path.indexOf('/admin') !== -1) return next('/login')
 		next()
 	}
 })
