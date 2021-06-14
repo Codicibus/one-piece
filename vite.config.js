@@ -9,7 +9,10 @@ export default defineConfig({
 	base: '/',
 	// 服务端渲染
 	ssr: false,
-	server: { proxy },
+	server: {
+		proxy
+	},
+	strictPort: true, // 若端口已被占用则会直接退出
 	resolve: {
 		alias: {
 			'@': resolve(__dirname, 'src'),
