@@ -36,6 +36,7 @@ func PostArticle(c *gin.Context) {
 	A.BackgroundVisible = utils.GetBool(c.Request.FormValue("background_visible"))
 	A.BackgroundRandom = utils.GetBool(c.Request.FormValue("background_random"))
 	A.BackgroundPic = c.Request.FormValue("background_pic")
+
 	A.ContentHash = c.Request.FormValue("content_hash")
 	//A.UUID = c.Request.Header.Get("Authorization")
 	jwt := middleware.NewJWT()
@@ -61,8 +62,11 @@ func PostArticle(c *gin.Context) {
 			return
 		}
 		if A.BackgroundPic == "" && A.BackgroundRandom {
-			A.BackgroundPic = "/api/image/query?image_hash=" + service.GetRandomBackgroundPic().ImageHash
+			A.BackgroundPic = "/v1/image/query?image_hash=" + service.GetRandomBackgroundPic().ImageHash
 		}
+	}
+	if !strings.HasPrefix(A.BackgroundPic, "http") {
+		A.BackgroundPic = "v1/image/query?image_hash=" + A.BackgroundPic
 	}
 	articleRet, err := service.PostArticle(A)
 	if err != nil {
@@ -72,6 +76,59 @@ func PostArticle(c *gin.Context) {
 	} else {
 		response.OkWithDetailed(articleRet, "文章插入成功", c)
 	}
+}
+
+func UpdateArticle(c *gin.Context) {
+	oldArticleHash := c.Request.FormValue("old_article_hash")
+	jwt := middleware.NewJWT()
+	claims, err := jwt.ParseToken(c.Request.Header.Get("Authorization"))
+	if err != nil {
+		response.FailWithDetailed(claims, "解析token失败："+err.Error(), c)
+		c.Abort()
+		return
+	}
+	oldArticleUUID := claims.UUID
+	oldArticle := model.Article{
+		ContentHash: oldArticleHash,
+		UUID:        oldArticleUUID,
+	}
+	var A model.Article
+	A.UUID = claims.UUID
+	A.Title = c.Request.FormValue("title")
+	A.Content = c.Request.FormValue("content")
+	A.BackgroundVisible = utils.GetBool(c.Request.FormValue("background_visible"))
+	A.BackgroundRandom = utils.GetBool(c.Request.FormValue("background_random"))
+	A.BackgroundPic = c.Request.FormValue("background_pic")
+
+	A.ContentHash = c.Request.FormValue("content_hash")
+	if A.Title == "" || A.Content == "" {
+		response.FailWithDetailed(nil, "数据为空", c)
+		c.Abort()
+		return
+	}
+	if A.ContentHash == "" {
+		A.ContentHash = utils.MD5([]byte(A.Content))
+	}
+	if A.BackgroundVisible {
+		if A.BackgroundPic == "" && !A.BackgroundRandom {
+			response.FailWithDetailed(&A, "缺少背景图片", c)
+			c.Abort()
+			return
+		}
+		if A.BackgroundPic == "" && A.BackgroundRandom {
+			A.BackgroundPic = "/v1/image/query?image_hash=" + service.GetRandomBackgroundPic().ImageHash
+		}
+	}
+	if !strings.HasPrefix(A.BackgroundPic, "http") {
+		A.BackgroundPic = "v1/image/query?image_hash=" + A.BackgroundPic
+	}
+	article, err := service.UpdateArticle(oldArticle, A)
+	if err != nil {
+		response.FailWithDetailed(article, err.Error(), c)
+		c.Abort()
+		return
+	}
+	response.OkWithDetailed(article, "操作成功", c)
 }
 
 // RemoveArticle 文章删除接口

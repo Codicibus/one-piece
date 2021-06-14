@@ -33,7 +33,6 @@ func GetImage(c *gin.Context) {
 	}
 }
 
-
 // UploadImage 图片上传接口
 // @Summary 图片上传接口
 // @Description 图片上传接口 单纯只接收图片
@@ -73,14 +72,18 @@ func UploadImage(c *gin.Context) {
 		Image.ImageHash = utils.MD5(Image.ImageBin)
 	}
 	Image.ImagePath = "binary"
-	imageURI, err := service.UploadImage(Image)
-	if err != nil && imageURI == "" {
+	imageHash, err := service.UploadImage(Image)
+	if err != nil && imageHash == "" {
 		response.FailWithDetailed(nil, "上传图片失败: "+err.Error(), c)
 		c.Abort()
 		return
 	} else if err != nil {
-		response.OkWithDetailed(imageURI, err.Error(), c)
+		response.OkWithDetailed(imageHash, err.Error(), c)
 	} else {
-		response.OkWithDetailed(imageURI, "图片上传成功！", c)
+		response.OkWithDetailed(map[string]interface{}{
+			"image_name": Image.ImageName,
+			"image_size": Image.ImageSize,
+			"image_hash": imageHash,
+		}, "图片上传成功！", c)
 	}
 }

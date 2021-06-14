@@ -17,7 +17,14 @@ func (t Target) In(x []string) bool {
 }
 
 func GetBool(s string) bool {
-	return s == "true" || s == "false"
+	if s == "true" {
+		return true
+	} else if s == "false" {
+		return false
+	} else if s == "" {
+		return false
+	}
+	return false
 }
 
 func GetUUIDFromToken(token string) (uuid.UUID, error) {
