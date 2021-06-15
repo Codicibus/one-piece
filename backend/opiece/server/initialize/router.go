@@ -22,7 +22,7 @@ func Routers() *gin.Engine {
 			AllowAllOrigins:  true,
 			AllowCredentials: true,
 			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST"},
-			AllowHeaders:     []string{"Origin"},
+			AllowHeaders:     []string{"Origin", "Access-Control-Allow-Headers", "Content-Type", "Authorization"},
 			ExposeHeaders:    []string{"Content-Length"},
 			MaxAge:           12 * time.Hour,
 		}))
