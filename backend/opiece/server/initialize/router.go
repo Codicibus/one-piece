@@ -21,8 +21,8 @@ func Routers() *gin.Engine {
 		cors.Config{
 			AllowAllOrigins:  true,
 			AllowCredentials: true,
-			AllowMethods:     []string{"PUT", "PATCH", "GET", "POST"},
-			AllowHeaders:     []string{"Origin"},
+			AllowMethods:     []string{"GET", "POST"},
+			AllowHeaders:     []string{"Origin", "Content-Type"},
 			ExposeHeaders:    []string{"Content-Length"},
 			MaxAge:           12 * time.Hour,
 		}))
