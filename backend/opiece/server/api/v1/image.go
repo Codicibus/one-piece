@@ -24,7 +24,7 @@ func ImagePool(c *gin.Context) {
 // @Summary 根据图片hash获取图片
 // @Router /v1/image/query [get]
 func GetImage(c *gin.Context) {
-	imageHash := c.Request.FormValue("image_hash")
+	imageHash := c.Param("image_hash")
 	pic := service.GetBackgroundPicByHash(imageHash)
 	if pic != nil {
 		_, _ = c.Writer.Write(pic.ImageBin)

@@ -44,6 +44,14 @@ func RemoveArticle(article model.Article) error {
 	return global.ODB.Where("content_hash = ? AND uuid = ?", article.ContentHash, article.UUID).Delete(&article).Error
 }
 
+func DeleteArticle(contentHash, uuid string) error {
+	var Article model.Article
+	if errors.Is(global.ODB.Where("content_hash = ? AND uuid = ?", contentHash, uuid).First(&Article).Error, gorm.ErrRecordNotFound) {
+		return errors.New("文章不存在")
+	}
+	return global.ODB.Where("content_hash = ? AND uuid = ?", contentHash, uuid).Delete(&Article).Error
+}
+
 func GetArticles(pageSize int, pageNum int) ([]*model.Article, error) {
 	var articles []*model.Article
 	return articles, global.ODB.Order("created_at desc").Limit(pageSize).Offset(pageNum).Find(&articles).Error

@@ -3,9 +3,7 @@ package initialize
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "opiece/docs"
+	//_ "opiece/docs"
 	"opiece/server/global"
 	"opiece/server/middleware"
 	router2 "opiece/server/router"
@@ -29,16 +27,17 @@ func Routers() *gin.Engine {
 	publicRouter := router.Group("v1")
 	{
 		router2.InitUserRouter(publicRouter)
+		router2.InitPublicRouter(publicRouter)
+		router2.InitImageRouter(publicRouter)
 	}
 	privateRouter := router.Group("v1")
 	privateRouter.Use(middleware.JWTAuthMiddleware())
 	{
 		router2.InitArticleRouter(privateRouter)
 		router2.InitUploadRouter(privateRouter)
-		router2.InitImageRouter(privateRouter)
 		router2.InitDashboardRouter(privateRouter)
 	}
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	//router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return router
 }

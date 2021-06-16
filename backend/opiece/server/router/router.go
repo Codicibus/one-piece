@@ -13,14 +13,21 @@ func InitUserRouter(Router *gin.RouterGroup) {
 	}
 }
 
+func InitPublicRouter(Router *gin.RouterGroup) {
+	ArticleRouter := Router.Group("article")
+	{
+		ArticleRouter.GET("get", v1.GetArticle)
+		ArticleRouter.GET("category", v1.GetArticleByCategory)
+	}
+}
+
 func InitArticleRouter(Router *gin.RouterGroup) {
 	ArticleRouter := Router.Group("article")
 	{
 		ArticleRouter.POST("post", v1.PostArticle)
 		ArticleRouter.POST("remove", v1.RemoveArticle)
-		ArticleRouter.GET("get", v1.GetArticle)
+		ArticleRouter.POST("delete", v1.DeleteArticle)
 		ArticleRouter.POST("update", v1.UpdateArticle)
-		ArticleRouter.GET("category", v1.GetArticleByCategory)
 		ArticleRouter.POST("import_files", v1.ImportArticleFromFile)
 	}
 }
@@ -43,8 +50,11 @@ func InitImageRouter(Router *gin.RouterGroup) {
 func InitDashboardRouter(Router *gin.RouterGroup) {
 	DashboardRouter := Router.Group("dashboard")
 	{
-		DashboardRouter.GET("/systat", v1.GetSysStat)
-		DashboardRouter.GET("/article_count_ws", v1.GetArticleStat)
 		DashboardRouter.GET("/article_count", v1.GetArticleStatHttp)
+	}
+	Ws := DashboardRouter.Group("ws")
+	{
+		Ws.GET("/systat", v1.GetSysStat)
+		Ws.GET("/article_count_ws", v1.GetArticleStat)
 	}
 }

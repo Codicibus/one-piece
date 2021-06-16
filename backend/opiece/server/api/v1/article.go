@@ -163,14 +163,30 @@ func RemoveArticle(c *gin.Context) {
 	response.Ok(c)
 }
 
+// DeleteArticle delete article by content hash
+func DeleteArticle(c *gin.Context) {
+	contentHash := c.Request.FormValue("content_hash")
+	if contentHash == "" {
+		response.FailWithDetailed(nil, "未指定文章", c)
+		c.Abort()
+		return
+	}
+	uuid, _ := utils.GetUUIDFromToken(c.Request.Header.Get("Authorization"))
+	if err := service.DeleteArticle(contentHash, uuid.String()); err != nil {
+		response.FailWithDetailed(nil, "操作失败: "+err.Error(), c)
+		c.Abort()
+		return
+	}
+	response.Ok(c)
+}
+
 // GetArticle 文章获取接口
 // @Summary 文章获取接口
 // @Description 文章获取接口
 // @Tags 文章管理相关接口
 // @Accept json
-// @Param Authorization header string true "JWT用户令牌"
 // @Param page_size query string false "请求页数"
-// @Param page_size query string false "请求页码"
+// @Param page_num query string false "请求页码"
 // @Router /v1/article/get [get]
 func GetArticle(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("page_size"))
