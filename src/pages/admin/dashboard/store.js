@@ -1,12 +1,11 @@
-import request from '@/utils/request'
-import { setToken } from '@/utils/auth'
-// import translate from '@/utils/translate'
+import { bytesToGB } from '@/utils/util'
 import { defineStore } from 'pinia'
 
 export default defineStore({
 	id: 'dashboard',
 	state: () => ({
-		loading: false
+		loading: false,
+		serveDate: {}
 	}),
 	getters: {},
 	actions: {}
