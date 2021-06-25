@@ -3,8 +3,14 @@ export default {
 		target: 'https://fanyi-api.baidu.com',
 		changeOrigin: true
 	},
-	'/v1/': {
-		target: 'http://127.0.0.1:8080',
+	// '^/v1/dashboard': {
+	// 	target: 'wss://api.amujun.com',
+	// 	changeOrigin: true,
+	// 	ws: true
+	// 	// rewrite: path => path.replace(/^\/v1/, '')
+	// },
+	'/v1': {
+		target: 'https://api.amujun.com',
 		changeOrigin: true
 	}
 }
