@@ -30,6 +30,8 @@ import { defineComponent } from 'vue'
 import { DownOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { removeToken } from '@/utils/auth'
 import { useRouter } from 'vue-router'
+import socket from '@/utils/socket'
+
 export default defineComponent({
 	components: {
 		DownOutlined,
@@ -39,7 +41,7 @@ export default defineComponent({
 		const router = useRouter()
 		const signOut = () => {
 			removeToken()
-
+			socket.close(1000)
 			router.push('/login')
 		}
 		return { signOut }
