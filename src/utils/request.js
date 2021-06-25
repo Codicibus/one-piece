@@ -7,8 +7,8 @@ import NProgress from 'nprogress'
 
 // 请求配置
 const request = axios.create({
-	timeout: 1000 * 5, // 请求超时
-	baseURL: import.meta.env.VITE_BASE_URL, // 基础路径
+	timeout: 1000 * 3, // 请求超时
+	// baseURL: import.meta.env.VITE_BASE_URL, // 基础路径
 	responseType: 'json', // 请求响应类型
 	responseEncoding: 'utf8', // 编码格式
 	/**
