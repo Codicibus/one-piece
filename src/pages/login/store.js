@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import { setToken } from '@/utils/auth'
-// import translate from '@/utils/translate'
 import { defineStore } from 'pinia'
 
 export default defineStore({
@@ -16,9 +15,6 @@ export default defineStore({
 				setToken(token)
 			} catch (error) {
 				return
-				// console.error(error.message)
-				// const data = await translate(error.message)
-				// console.log(data)
 			}
 		}
 	}
