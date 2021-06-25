@@ -59,7 +59,7 @@
 				<a-col :span="24">
 					<a-form-item name="articleBackgroundImage">
 						<a-upload
-							:action="uploadURL"
+							action="/v1/upload/pic"
 							list-type="picture"
 							name="local_file"
 							:headers="{ Authorization: getToken() }"
@@ -170,7 +170,6 @@ export default defineComponent({
 			rules,
 			onClose,
 			submit,
-			uploadURL: import.meta.env.VITE_UPLOAD_URL,
 			getToken,
 			handleChange
 		}
