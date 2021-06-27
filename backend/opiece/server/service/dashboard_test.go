@@ -16,3 +16,11 @@ func TestGetMemory(t *testing.T) {
 func TestGetNetStat(t *testing.T) {
 	GetNetStat()
 }
+
+func TestGetCpuState(t *testing.T) {
+	GetCpuState()
+}
+
+func TestGetDiskState(t *testing.T) {
+	fmt.Println(GetDiskState())
+}

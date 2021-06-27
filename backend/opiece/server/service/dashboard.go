@@ -1,7 +1,9 @@
 package service
 
 import (
+	"fmt"
 	cpu "github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
 	sysnet "github.com/shirou/gopsutil/v3/net"
 	"opiece/server/global"
@@ -15,13 +17,39 @@ func GetCpuPercent() float64 {
 		panic(err)
 	}
 	p := 0.0
-	if len(percent) != 0{
+	if len(percent) != 0 {
 		p = percent[0]
 	}
 	return p
 }
 
-func GetMemory() *mem.VirtualMemoryStat{
+func GetCpuState() []cpu.InfoStat {
+	info, err := cpu.Info()
+	if err != nil {
+		panic(err)
+	}
+	return info
+}
+
+func GetDiskState() map[string]interface{} {
+	partitionStat, err := disk.Partitions(true)
+	if err != nil {
+		panic(err)
+	}
+	info := make(map[string]interface{})
+	for _, pState := range partitionStat {
+		usage, err := disk.Usage(pState.Mountpoint)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		info["usage"] = usage
+		info[pState.Mountpoint] = pState
+	}
+	return info
+}
+
+func GetMemory() *mem.VirtualMemoryStat {
 	vmem, err := mem.VirtualMemory()
 	if err != nil {
 		panic(err)
@@ -29,8 +57,8 @@ func GetMemory() *mem.VirtualMemoryStat{
 	return vmem
 }
 
-func GetNetStat() []sysnet.IOCountersStat{
-	stat, err :=  sysnet.IOCounters(false)
+func GetNetStat() []sysnet.IOCountersStat {
+	stat, err := sysnet.IOCounters(false)
 	if err != nil {
 		panic(err)
 	}

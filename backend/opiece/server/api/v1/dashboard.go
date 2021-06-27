@@ -12,7 +12,7 @@ import (
 func GetArticleStatHttp(c *gin.Context) {
 	count, err := service.GetAllArticlesCount()
 	if err != nil {
-		response.FailWithDetailed(count, "操作失败: "+ err.Error(), c)
+		response.FailWithDetailed(count, "操作失败: "+err.Error(), c)
 		c.Abort()
 		return
 	}
@@ -42,11 +42,9 @@ func GetArticleStat(c *gin.Context) {
 			continue
 		}
 		_ = conn.WriteMessage(websocket.TextMessage, data)
-		time.Sleep(time.Second*10)
+		time.Sleep(time.Second * 10)
 	}
 }
-
-
 
 // GetSysStat
 // @Description 每x秒获取一次系统信息，该接口是ws协议
@@ -55,7 +53,7 @@ func GetArticleStat(c *gin.Context) {
 // @Produce application/json
 // @Router /v1/dashboard/systat [get]
 func GetSysStat(c *gin.Context) {
- 	conn := service.NewWSUpgrader(c)
+	conn := service.NewWSUpgrader(c)
 	defer conn.Close()
 	for {
 		cpuPercent := service.GetCpuPercent()
@@ -63,8 +61,10 @@ func GetSysStat(c *gin.Context) {
 		netStat := service.GetNetStat()
 		data, err := json.Marshal(map[string]interface{}{
 			"cpu_percent": cpuPercent,
-			"mem_stat": memStat,
-			"net_stat": netStat,
+			"cpu_info":    service.GetCpuState(),
+			"mem_stat":    memStat,
+			"net_stat":    netStat,
+			"disk_stat":   service.GetDiskState(),
 		})
 		if err != nil {
 			_ = conn.WriteMessage(websocket.TextMessage, []byte("数据序列化失败"))
