@@ -38,13 +38,15 @@ func GetDiskState() map[string]interface{} {
 	}
 	info := make(map[string]interface{})
 	for _, pState := range partitionStat {
-		usage, err := disk.Usage(pState.Mountpoint)
+		usage := make(map[string]interface{})
+		u, err := disk.Usage(pState.Mountpoint)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
-		info["usage"] = usage
+		usage[pState.Mountpoint] = u
 		info[pState.Mountpoint] = pState
+		info["usage"] = usage
 	}
 	return info
 }
