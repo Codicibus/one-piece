@@ -36,7 +36,7 @@ func PostArticle(c *gin.Context) {
 	A.BackgroundVisible = utils.GetBool(c.Request.FormValue("background_visible"))
 	A.BackgroundRandom = utils.GetBool(c.Request.FormValue("background_random"))
 	A.BackgroundPic = c.Request.FormValue("background_pic")
-
+	A.Category = c.Request.FormValue("category")
 	A.ContentHash = c.Request.FormValue("content_hash")
 	//A.UUID = c.Request.Header.Get("Authorization")
 	jwt := middleware.NewJWT()
@@ -99,7 +99,7 @@ func UpdateArticle(c *gin.Context) {
 	A.BackgroundVisible = utils.GetBool(c.Request.FormValue("background_visible"))
 	A.BackgroundRandom = utils.GetBool(c.Request.FormValue("background_random"))
 	A.BackgroundPic = c.Request.FormValue("background_pic")
-
+	A.Category = c.Request.FormValue("category")
 	A.ContentHash = c.Request.FormValue("content_hash")
 	if A.Title == "" || A.Content == "" {
 		response.FailWithDetailed(nil, "数据为空", c)
@@ -203,10 +203,15 @@ func GetArticle(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	count, err := service.GetAllArticlesCount()
+	if err != nil {
+		count = -1
+		// TODO: record log
+	}
 	response.OkWithDetailed(map[string]interface{}{
 		"page_size": pageSize,
 		"page_num":  pageNum,
-		"total":     len(articles),
+		"total":     count,
 		"articles":  articles,
 	}, "操作成功！", c)
 }

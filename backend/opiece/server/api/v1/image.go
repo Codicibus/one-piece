@@ -33,6 +33,10 @@ func GetImage(c *gin.Context) {
 	}
 }
 
+func GetImageInfo(c *gin.Context) {
+
+}
+
 // UploadImage 图片上传接口
 // @Summary 图片上传接口
 // @Description 图片上传接口 单纯只接收图片

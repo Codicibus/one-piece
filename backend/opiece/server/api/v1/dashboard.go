@@ -74,3 +74,7 @@ func GetSysStat(c *gin.Context) {
 		time.Sleep(time.Second * 5)
 	}
 }
+
+func GetAllArticleCategories(c *gin.Context) {
+
+}

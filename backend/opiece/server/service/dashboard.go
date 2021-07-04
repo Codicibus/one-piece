@@ -72,3 +72,6 @@ func GetAllArticlesCount() (int64, error) {
 	err := global.ODB.Model(&model.Article{}).Count(&count).Error
 	return count, err
 }
+
+func GetAllArticleCategories() {
+}
