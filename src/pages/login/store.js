@@ -14,7 +14,7 @@ export default defineStore({
 				const { token } = await request.post('/v1/user/login', formData)
 				setToken(token)
 			} catch (error) {
-				return
+				return console.error(error)
 			}
 		}
 	}
