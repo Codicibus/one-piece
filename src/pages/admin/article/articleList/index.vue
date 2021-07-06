@@ -1,53 +1,40 @@
 <template>
-	<a-card class="batchCard">
-		<a-space :size="10" class="batchProcessing">
-			<a-button type="primary" @click="openDrawer">
-				<template #icon>
-					<PlusOutlined />
-				</template>
-				添加文章
-			</a-button>
-			<a-popconfirm title="确定要删除?" @confirm="onDelete(record)">
-				<a-button type="danger">
-					<template #icon>
-						<DeleteOutlined />
-					</template>
-					批量删除
-				</a-button>
-			</a-popconfirm>
-			<a-button type="primary">
-				<template #icon>
-					<EditOutlined />
-				</template>
-				批量导出
-			</a-button>
-		</a-space>
-	</a-card>
+	<!-- 按钮组 -->
+	<button-set />
+	<!-- 表格 -->
 	<a-table
 		:row-selection="{
 			selectedRows: articleListStore.selectedRows,
 			onChange: onSelectChange
 		}"
-		:columns="columns"
-		:row-key="record => record.id"
-		:data-source="dataSource"
-		:pagination="{ current: 1, pageSize: 5, total: 10 }"
 		:loading="articleListStore.loading"
-		:scroll="{ y: '100%' }"
-		style="height: 0"
+		:columns="articleListStore.columns"
+		:row-key="record => record.content_hash"
+		:data-source="articleListStore.articlesInfo.articles"
+		:pagination="{
+			pageSize: articleListStore.pagingSetup.page_size,
+			total: articleListStore.articlesInfo.total,
+			showSizeChange: (page_num, page_size) =>
+				articleListStore.$path({ pagingSetup: page_num, page_size })
+		}"
+		:scroll="{ y: 400 }"
 	>
 		<!-- 标题 -->
 		<template #title="{ text }">{{ text }}</template>
+		<!-- 内容 -->
+		<template #content="{ text }">{{ text }}</template>
 		<!-- 分类 -->
-		<template #classify="{ text }">
+		<template #category="{ text }">
 			<a-tag color="blue">{{ text }}</a-tag>
 		</template>
 		<!-- 发布时间 -->
 		<template #time="{ text }">{{ text }}</template>
+		<!-- 更新时间 -->
+		<!-- <template #time="{ text }">{{ text }}</template> -->
 		<!-- 操作 start -->
-		<template #action>
+		<template #action="{ record }">
 			<a-space :size="8">
-				<a-button type="primary" @click="openDrawer">
+				<a-button type="primary" @click="onEdit(record)">
 					<template #icon>
 						<EditOutlined />
 					</template>
@@ -65,47 +52,45 @@
 		</template>
 		<!-- 操作 end -->
 	</a-table>
-	<Drawer />
+	<!-- 抽屉 -->
+	<Modal />
 </template>
 
 <script>
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 import { defineComponent, toRaw } from 'vue'
 import useStore from './store'
-import Drawer from './components/Drawer/Drawer.vue'
-import {
-	SearchOutlined,
-	EditOutlined,
-	DeleteOutlined,
-	PlusOutlined
-} from '@ant-design/icons-vue'
-import { columns, dataSource } from './mock'
+import Modal from './components/modal/index.vue'
+import ButtonSet from './components/buttonSet/index.vue'
 const articleListStore = useStore()
 
 export default defineComponent({
 	name: 'articleList',
-	components: {
-		SearchOutlined,
-		EditOutlined,
-		DeleteOutlined,
-		PlusOutlined,
-		Drawer
-	},
+	components: { Modal, ButtonSet, EditOutlined, DeleteOutlined },
 	setup() {
+		// 获取文章
+		articleListStore.getArticle()
+
+		// 选择文章
 		const onSelectChange = (selectedRowKeys, selectedRows) => {
 			articleListStore.$patch({ selectedRows })
-			const keys = toRaw(articleListStore.selectedRows)
-			console.log(keys, selectedRowKeys)
+			console.log(selectedRowKeys, toRaw(selectedRows))
 		}
-		const openDrawer = () => articleListStore.$patch({ visible: true })
+
+		// 编辑文章
+		const onEdit = record =>
+			articleListStore.$patch({ visible: true, formData: record })
+
+		// 删除文章
 		const onDelete = record => {
 			console.log(record)
+			// 重新获取文章
+			articleListStore.getArticle()
 		}
 		return {
 			articleListStore,
-			columns,
-			dataSource,
-			openDrawer,
 			onSelectChange,
+			onEdit,
 			onDelete
 		}
 	}
@@ -113,10 +98,7 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.batchCard {
+.batchProcessing {
 	margin-bottom: 16px;
-	.batchProcessing {
-		float: right;
-	}
 }
 </style>
