@@ -24,7 +24,8 @@ import {
 	Select,
 	Switch,
 	Upload,
-	Popconfirm
+	Popconfirm,
+	Pagination
 } from 'ant-design-vue'
 // 导入
 export default app => {
@@ -53,4 +54,5 @@ export default app => {
 	app.use(Switch)
 	app.use(Upload)
 	app.use(Popconfirm)
+	app.use(Pagination)
 }
