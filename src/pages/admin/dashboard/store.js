@@ -1,10 +1,11 @@
-import { bytesToGB } from '@/utils/util'
+import { unitTransform } from '@/utils/util'
 import { defineStore } from 'pinia'
 
 export default defineStore({
 	id: 'dashboard',
 	state: () => ({
 		loading: false,
+		cpu_info: [],
 		cpu_percent: null,
 		mem_stat: {},
 		net_stat: []
@@ -28,17 +29,13 @@ export default defineStore({
 		}
 	},
 	actions: {
+		cpuInfo(tpye) {
+			this.cpu_info.forEach(item => {
+				return item[tpye]
+			})
+		},
 		RAMStat(tpye) {
-			switch (tpye) {
-				case 'total':
-					return bytesToGB(this.mem_stat.total).toFixed(2) + ' GB'
-				case 'available':
-					return bytesToGB(this.mem_stat.available).toFixed(2) + ' GB'
-				case 'used':
-					return bytesToGB(this.mem_stat.used).toFixed(2) + ' GB'
-				case 'free':
-					return bytesToGB(this.mem_stat.free).toFixed(2) + ' GB'
-			}
+			return unitTransform(this.mem_stat[tpye]).toFixed(0) + ' MB'
 		}
 	}
 })
