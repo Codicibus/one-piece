@@ -54,7 +54,7 @@ func PostArticle(c *gin.Context) {
 		return
 	}
 	if A.ContentHash == "" {
-		A.ContentHash = utils.MD5([]byte(A.Content))
+		A.ContentHash = utils.MD5([]byte(A.Title+A.Content))
 	}
 	if A.BackgroundVisible {
 		if A.BackgroundPic == "" && !A.BackgroundRandom {
@@ -108,7 +108,7 @@ func UpdateArticle(c *gin.Context) {
 		return
 	}
 	if A.ContentHash == "" {
-		A.ContentHash = utils.MD5([]byte(A.Content))
+		A.ContentHash = utils.MD5([]byte(A.Title+A.Content))
 	}
 	if A.BackgroundVisible {
 		if A.BackgroundPic == "" && !A.BackgroundRandom {
@@ -215,8 +215,15 @@ func GetArticle(c *gin.Context) {
 	if pageSize == 0 {
 		pageSize = 10
 	}
-	if pageNum == 0 {
-		pageNum = 1
+	count, err := service.GetAllArticlesCount()
+	if err != nil {
+		count = -1
+		// TODO: record log
+	}
+	if count >= 10 && pageNum == 0{
+		pageNum = 10
+	} else {
+		pageNum = 0
 	}
 	articles, err := service.GetArticles(pageSize, pageNum)
 	if err != nil {
@@ -225,11 +232,6 @@ func GetArticle(c *gin.Context) {
 		return
 	}
 
-	count, err := service.GetAllArticlesCount()
-	if err != nil {
-		count = -1
-		// TODO: record log
-	}
 	response.OkWithDetailed(map[string]interface{}{
 		"page_size": pageSize,
 		"page_num":  pageNum,
