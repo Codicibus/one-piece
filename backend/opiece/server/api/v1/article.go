@@ -163,8 +163,28 @@ func RemoveArticle(c *gin.Context) {
 	response.Ok(c)
 }
 
-// DeleteArticle delete article by content hash
 func DeleteArticle(c *gin.Context) {
+	contentHash := c.Request.FormValue("content_hash")
+	if contentHash == "" {
+		response.FailWithDetailed(nil, "未指定文章", c)
+		c.Abort()
+		return
+	}
+	uuid, _ := utils.GetUUIDFromToken(c.Request.Header.Get("Authorization"))
+	contentHashes := strings.Split(contentHash, ",")
+	errs := service.DeleteArticleBatch(contentHashes, uuid.String())
+	if len(errs) != 0 {
+		for _, err := range errs {
+			response.FailWithDetailed(nil, "操作出现失败: "+ err.Error(), c)
+		}
+		c.Abort()
+		return
+	}
+	response.Ok(c)
+}
+
+// DeleteArticle delete article by content hash
+func _oldDeleteArticle(c *gin.Context) {
 	contentHash := c.Request.FormValue("content_hash")
 	if contentHash == "" {
 		response.FailWithDetailed(nil, "未指定文章", c)

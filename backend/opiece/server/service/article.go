@@ -44,6 +44,23 @@ func RemoveArticle(article model.Article) error {
 	return global.ODB.Where("content_hash = ? AND uuid = ?", article.ContentHash, article.UUID).Delete(&article).Error
 }
 
+func DeleteArticleBatch(contentHashes []string, uuid string) []error {
+	errRet := make([]error, 0)
+	for _, hash := range contentHashes {
+		var Article model.Article
+		err := global.ODB.Where("content_hash = ? AND uuid = ?", hash, uuid).First(&Article).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// TODO handle errors
+			continue
+		}
+		err = global.ODB.Where("content_hash = ? AND uuid = ?", hash, uuid).Delete(&Article).Error
+		if err != nil {
+			errRet = append(errRet, errors.New(fmt.Sprintf("%s 删除遇到错误: %#v", hash, err)))
+		}
+	}
+	return errRet
+}
+
 func DeleteArticle(contentHash, uuid string) error {
 	var Article model.Article
 	if errors.Is(global.ODB.Where("content_hash = ? AND uuid = ?", contentHash, uuid).First(&Article).Error, gorm.ErrRecordNotFound) {
