@@ -53,7 +53,7 @@ func DeleteArticleBatch(contentHashes []string, uuid string) []error {
 			// TODO handle errors
 			continue
 		}
-		err = global.ODB.Where("content_hash = ? AND uuid = ?", hash, uuid).Delete(&Article).Error
+		err = global.ODB.Unscoped().Where("content_hash = ? AND uuid = ?", hash, uuid).Delete(&Article).Error
 		if err != nil {
 			errRet = append(errRet, errors.New(fmt.Sprintf("%s 删除遇到错误: %#v", hash, err)))
 		}
@@ -99,4 +99,21 @@ func GetRandomBackgroundPic() *model.PICs {
 		return &pics
 	}
 	return nil
+}
+
+func ExportArticleToZipFile(contentHashes []string) []model.BinaryFile {
+	var A model.Article
+	var retFiles []model.BinaryFile
+	for _, contentHash := range contentHashes {
+		err := global.ODB.Where("content_hash = ?", contentHash).First(&A).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// TODO handle errors
+			continue
+		}
+		retFiles = append(retFiles, model.BinaryFile{
+			FileName: A.Title,
+			FileData: []byte(A.Content),
+		})
+	}
+	return retFiles
 }

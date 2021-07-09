@@ -1,8 +1,12 @@
 package utils
 
 import (
+	"archive/zip"
+	"bytes"
+	"errors"
 	"github.com/google/uuid"
 	"opiece/server/middleware"
+	"opiece/server/model"
 )
 
 type Target string
@@ -34,4 +38,27 @@ func GetUUIDFromToken(token string) (uuid.UUID, error) {
 		return uuid.UUID{}, err
 	}
 	return claims.UUID, err
+}
+
+func CompressFileToZip(files []model.BinaryFile) *bytes.Buffer{
+	buf := &bytes.Buffer{}
+	zipWriter := zip.NewWriter(buf)
+	defer func() {
+		err := zipWriter.Close()
+		if err != nil {
+			panic(errors.New("关闭文件句柄错误: "+ err.Error()))
+		}
+	}()
+	for _, file := range files {
+		zipFile, err := zipWriter.Create(file.FileName)
+		if err != nil {
+			panic(err)
+		}
+		_, err = zipFile.Write(file.FileData)
+		if err != nil {
+			// TODO: handle errors
+			panic(err)
+		}
+	}
+	return buf
 }

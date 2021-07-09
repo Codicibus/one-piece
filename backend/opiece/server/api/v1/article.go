@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/gin-gonic/gin"
+	"io"
 	"io/ioutil"
 	"opiece/server/middleware"
 	"opiece/server/model"
@@ -223,6 +224,7 @@ func GetArticle(c *gin.Context) {
 		c.Abort()
 		return
 	}
+
 	count, err := service.GetAllArticlesCount()
 	if err != nil {
 		count = -1
@@ -300,6 +302,32 @@ func ImportArticleFromFile(c *gin.Context) {
 	}
 	if len(failed) != 0 {
 		response.FailWithDetailed(failed, "操作有错误", c)
+		c.Abort()
+		return
+	}
+	response.Ok(c)
+}
+
+func ExportArticleToZipFile(c *gin.Context) {
+	contentHash := c.Request.FormValue("content_hash")
+	if contentHash == "" {
+		response.FailWithDetailed(nil, "文章hash不能为空", c)
+		c.Abort()
+		return
+	}
+	hashes := strings.Split(contentHash, ",")
+	binaryFileObjs := service.ExportArticleToZipFile(hashes)
+	zipData := utils.CompressFileToZip(binaryFileObjs)
+	if zipData == nil {
+		response.FailWithDetailed(nil, "压缩过程中出现内部错误", c)
+		c.Abort()
+		return
+	}
+	c.Writer.Header().Add("Content-Type", "application/octet-stream")
+	_, err := io.Copy(c.Writer, zipData)
+	if err != nil {
+		response.FailWithDetailed(nil, "文件加载失败: "+err.Error(), c)
+		c.Abort()
 		return
 	}
 	response.Ok(c)

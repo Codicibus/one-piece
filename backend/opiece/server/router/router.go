@@ -29,6 +29,7 @@ func InitArticleRouter(Router *gin.RouterGroup) {
 		ArticleRouter.POST("delete", v1.DeleteArticle)
 		ArticleRouter.POST("update", v1.UpdateArticle)
 		ArticleRouter.POST("import_files", v1.ImportArticleFromFile)
+		ArticleRouter.GET("export_file", v1.ExportArticleToZipFile)
 	}
 }
 
