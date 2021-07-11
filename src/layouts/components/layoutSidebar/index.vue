@@ -1,9 +1,7 @@
 <template>
-	<a-layout-sider v-model:collapsed="collapsed" collapsible inlineCollapsed>
+	<a-layout-sider v-model:collapsed="collapsed" collapsible inlineCollapsed class="sider">
 		<!-- logo -->
-		<a-typography-title :level="4" class="logo">
-			ONE PIECE
-		</a-typography-title>
+		<a-typography-title :level="4" class="logo"> ONE PIECE </a-typography-title>
 		<a-menu
 			theme="dark"
 			v-model:selectedKeys="selectedKeys"
@@ -19,13 +17,6 @@
 					</span>
 				</router-link>
 			</a-menu-item>
-			<!-- 基础设置 -->
-			<a-menu-item key="Setting">
-				<router-link :to="{ name: 'Setting' }">
-					<pie-chart-outlined />
-					<span>基础设置</span>
-				</router-link>
-			</a-menu-item>
 			<!-- 文章管理 -->
 			<a-sub-menu key="sub1">
 				<template #title>
@@ -33,24 +24,13 @@
 					<span>文章管理</span>
 				</template>
 				<a-menu-item key="ArticleList">
-					<router-link :to="{ name: 'ArticleList' }">
-						文章列表
-					</router-link>
+					<router-link :to="{ name: 'ArticleList' }"> 文章列表 </router-link>
 				</a-menu-item>
 				<a-menu-item key="ArticleClassify">
-					<router-link :to="{ name: 'ArticleClassify' }">
-						文章分类
-					</router-link>
-				</a-menu-item>
-				<a-menu-item key="PagingSetting">
-					<router-link :to="{ name: 'PagingSetting' }">
-						分页设置
-					</router-link>
+					<router-link :to="{ name: 'ArticleClassify' }"> 文章分类 </router-link>
 				</a-menu-item>
 				<a-menu-item key="ImagePool">
-					<router-link :to="{ name: 'ImagePool' }">
-						图片池
-					</router-link>
+					<router-link :to="{ name: 'ImagePool' }"> 图片池 </router-link>
 				</a-menu-item>
 			</a-sub-menu>
 		</a-menu>
@@ -77,9 +57,11 @@ export default defineComponent({
 </script>
 
 <style lang="less" scope>
-.logo {
-	text-align: center;
-	margin: 10px auto !important;
-	color: white !important;
+.sider {
+	.logo {
+		text-align: center;
+		margin: 10px auto !important;
+		color: white !important;
+	}
 }
 </style>

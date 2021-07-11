@@ -1,16 +1,12 @@
 <template>
 	<a-layout-header class="header">
 		<div class="personal">
-			<a-avatar class="avatar">
-				<template #icon>
-					<UserOutlined />
-				</template>
-			</a-avatar>
+			<a-avatar><UserOutlined /></a-avatar>
 			<a-dropdown>
-				<a class="ant-dropdown-link" @click.prevent>
-					wood
+				<a-button type="link" @click.prevent>
+					Link
 					<DownOutlined />
-				</a>
+				</a-button>
 				<template #overlay>
 					<a-menu>
 						<a-menu-item>
@@ -56,8 +52,5 @@ export default defineComponent({
 }
 .personal {
 	float: right;
-	.avatar {
-		margin-right: 5px;
-	}
 }
 </style>

@@ -1,7 +1,13 @@
 <template>
-	<a-layout-content style="margin: 16px">
-		<!-- <a-card class="main" :style="{ padding: '24px', minHeight: '360px' }"> -->
+	<a-layout-content class="content">
 		<router-view />
-		<!-- </a-card> -->
 	</a-layout-content>
 </template>
+
+<style lang="less" scoped>
+.content {
+	margin: 16px 16px 0;
+	height: calc(100vh - 170px);
+	overflow: hidden;
+}
+</style>
