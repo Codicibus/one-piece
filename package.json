@@ -11,6 +11,7 @@
     "ant-design-vue": "^2.2.0-beta.3",
     "axios": "^0.21.1",
     "babel-plugin-prismjs": "^2.0.1",
+    "dayjs": "^1.10.6",
     "highlight.js": "^10.7.3",
     "js-cookie": "^2.2.1",
     "md5": "^2.3.0",
@@ -20,8 +21,7 @@
     "rollup-plugin-babel": "^4.4.0",
     "vite-plugin-importer": "^0.2.1",
     "vue": "^3.0.5",
-    "vue-router": "^4.0.8",
-    "vuex": "^4.0.0"
+    "vue-router": "^4.0.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.2",
