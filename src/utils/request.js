@@ -40,7 +40,7 @@ request.interceptors.response.use(
 		const res = response.data.data
 		switch (status) {
 			case 0:
-				message.success(msg || '错误')
+				!res && message.success(msg || '错误')
 				return res
 			case 7:
 				message.error(msg || '错误')
