@@ -1,31 +1,33 @@
 <template>
 	<a-space :size="10" class="batchProcessing">
 		<a-button type="primary" @click="addArticle">
-			<template #icon>
-				<PlusOutlined />
-			</template>
+			<PlusOutlined />
 			添加文章
 		</a-button>
-		<a-popconfirm title="确定要删除?" @confirm="onDelete(record)">
-			<a-button type="danger">
-				<template #icon>
-					<DeleteOutlined />
-				</template>
+		<a-popconfirm title="确定要删除?" @confirm="onDelete">
+			<a-button type="primary" danger>
+				<DeleteOutlined />
 				批量删除
 			</a-button>
 		</a-popconfirm>
-		<a-button type="primary">
-			<template #icon>
-				<EditOutlined />
-			</template>
-			导入文章
-		</a-button>
-		<a-button type="primary">
-			<template #icon>
-				<EditOutlined />
-			</template>
-			批量导出
-		</a-button>
+		<a-upload
+			action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+			v-model:file-list="articleListStore.fileList"
+		>
+			<a-button type="primary">
+				<ImportOutlined />
+				批量导入
+			</a-button>
+		</a-upload>
+		<a-upload
+			action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+			v-model:file-list="articleListStore.fileList"
+		>
+			<a-button type="primary">
+				<UploadOutlined />
+				批量导出
+			</a-button>
+		</a-upload>
 	</a-space>
 </template>
 
@@ -33,24 +35,37 @@
 import { defineComponent, toRaw } from 'vue'
 import useStore from '../../store'
 import {
-	EditOutlined,
+	PlusOutlined,
 	DeleteOutlined,
-	PlusOutlined
+	ImportOutlined,
+	UploadOutlined
 } from '@ant-design/icons-vue'
 
 const articleListStore = useStore()
 
 export default defineComponent({
 	name: 'articleList',
-	components: { EditOutlined, DeleteOutlined, PlusOutlined },
+	components: {
+		PlusOutlined,
+		DeleteOutlined,
+		ImportOutlined,
+		UploadOutlined
+	},
 	setup() {
-		const openDrawer = () => articleListStore.$patch({ visible: true })
+		// 添加文章
 		const addArticle = () => {
-			articleListStore.resetForm
-			openDrawer()
+			// 打开窗口,修改编辑模式为添加
+			articleListStore.$patch({ visible: true, editingMode: 'add' })
+			// 重置表单
+			articleListStore.resetForm()
 		}
-		const onDelete = record => {
-			console.log(record)
+		// 批量删除文章
+		const onDelete = async () => {
+			const selectedRowKeys = toRaw(articleListStore.selectedRowKeys)
+			const content_hash = selectedRowKeys.join(',')
+			await articleListStore.deleteArticle(content_hash)
+			// 重新获取文章
+			await articleListStore.getArticle()
 		}
 		return {
 			articleListStore,

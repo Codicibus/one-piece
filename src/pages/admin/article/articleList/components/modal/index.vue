@@ -25,24 +25,17 @@
 				</a-col>
 				<a-col :span="12">
 					<a-form-item label="文章分类" name="category">
-						<a-select
-							v-model:value="
-								articleListStore.formData.category.value
-							"
-							mode="multiple"
-							style="width: 100%"
+						<a-input
+							v-model:value="articleListStore.formData.category"
 							:placeholder="rules.category.message"
-							:options="
-								articleListStore.formData.category.options
-							"
-							allowClear
+							allow-clear
 						/>
 					</a-form-item>
 				</a-col>
 			</a-row>
 			<a-row :gutter="16">
 				<a-col :span="12">
-					<a-form-item label="文章背景图">
+					<a-form-item label="文章背景图" name="background_visible">
 						<a-switch
 							v-model:checked="
 								articleListStore.formData.background_visible
@@ -55,7 +48,7 @@
 					</a-form-item>
 				</a-col>
 				<a-col :span="12">
-					<a-form-item label="文章随机图">
+					<a-form-item label="文章随机图" name="background_random">
 						<a-switch
 							v-model:checked="
 								articleListStore.formData.background_random
@@ -75,11 +68,13 @@
 				"
 			>
 				<a-col :span="24">
-					<a-form-item name="articleBackgroundImage">
+					<a-form-item name="background_pic">
 						<a-upload
 							action="/v1/upload/pic"
 							list-type="picture"
+							:file-list="articleListStore.getImageList"
 							name="local_file"
+							@change="handleChange"
 							:headers="{ Authorization: getToken() }"
 						>
 							<a-button>
@@ -99,10 +94,10 @@
 			</a-row>
 		</a-form>
 		<div class="footer">
-			<a-button style="margin-right: 8px" @click="closeDrawer"
-				>返回</a-button
-			>
-			<a-button type="primary" @click="submit">完成</a-button>
+			<a-button style="margin-right: 8px" @click="closeDrawer">
+				返回
+			</a-button>
+			<a-button type="primary" @click.prevent="submit">完成</a-button>
 		</div>
 	</a-drawer>
 </template>
@@ -112,21 +107,13 @@ import {
 	UploadOutlined,
 	LoadingOutlined
 } from '@ant-design/icons-vue'
-import { defineComponent, toRaw, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import Editor from '../editor/index.vue'
 import useStore from '../../store'
 import { getToken } from '@/utils/auth'
 const articleListStore = useStore()
 const formRef = ref()
-const options = []
-for (let i = 0; i < 1000; i++) {
-	const value = `${i.toString(36)}${i}`
-	options.push({
-		value,
-		disabled: i === 10
-	})
-}
 
 export default defineComponent({
 	components: {
@@ -138,26 +125,26 @@ export default defineComponent({
 	setup() {
 		const rules = {
 			title: { required: true, message: '请输入文章标题' },
-			category: {
-				required: true,
-				type: 'object',
-				message: '请输入或选择文章分类'
-			},
+			category: { required: true, message: '请输入文章分类' },
 			content: { required: true, message: '请输入文章内容' }
 		}
 
-		articleListStore.$patch(state => {
-			state.formData.category = {
-				options,
-				value: ['a10', 'c12']
-			}
-		})
-
-		console.log(toRaw(articleListStore.formData.category))
-
-		const closeDrawer = () => articleListStore.$patch({ visible: false })
+		const closeDrawer = () => {
+			articleListStore.$patch({ visible: false })
+			// 重新获取文章
+			articleListStore.getArticle()
+		}
 
 		const handleChange = info => {
+			let resFileList = [...info.fileList]
+			resFileList = resFileList.slice(-1)
+			resFileList = resFileList.map(file => {
+				if (file.response) {
+					file.url = file.response.url
+				}
+				return file
+			})
+			fileList.value = resFileList
 			if (info.file.status !== 'uploading') {
 				console.log(info.file, info.fileList)
 			}
@@ -168,18 +155,28 @@ export default defineComponent({
 			}
 		}
 
-		const submit = () => {
-			formRef.value
-				.validate()
-				.then(() => {
-					console.log('values', toRaw(articleListStore.formData))
-					articleListStore.closeDrawer
-				})
-				.catch(error => {
-					return console.error('error', error)
-				})
+		const submit = async () => {
+			try {
+				await formRef.value.validate()
+				switch (articleListStore.editingMode) {
+					// 添加文章
+					case 'add':
+						await articleListStore.addArticle(
+							articleListStore.formData
+						)
+						break
+					// 编辑文章
+					case 'edit':
+						await articleListStore.editArticle(
+							articleListStore.formData
+						)
+						break
+				}
+				closeDrawer()
+			} catch (error) {
+				return console.error(error)
+			}
 		}
-
 		return {
 			articleListStore,
 			formRef,

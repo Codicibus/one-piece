@@ -1,55 +1,45 @@
 export const columns = [
 	{
 		title: '标题',
-		dataIndex: 'title',
+		dataIndex: 'name',
 		slots: {
-			customRender: 'title',
-			filterDropdown: 'filterDropdown'
+			customRender: 'name'
 		},
 		ellipsis: true
-	},
-	{
-		title: '内容',
-		dataIndex: 'content',
-		width: '20%',
-		ellipsis: true, // 自动省略
-		slots: {
-			customRender: 'content'
-		}
 	},
 	{
 		title: '分类',
 		dataIndex: 'category',
 		ellipsis: true, // 自动省略
 		// 筛选
-		filters: [
-			{
-				text: 'one',
-				value: 'one'
-			},
-			{
-				text: 'two',
-				value: 'two'
-			}
-		],
+		// filters: [
+		// 	{
+		// 		text: 'one',
+		// 		value: 'one'
+		// 	},
+		// 	{
+		// 		text: 'two',
+		// 		value: 'two'
+		// 	}
+		// ],
 		slots: {
 			customRender: 'category'
 		}
 	},
 	{
 		title: '发布时间',
-		dataIndex: 'time',
+		dataIndex: 'created_at',
 		sorter: true, // 排序
 		slots: {
-			customRender: 'time'
+			customRender: 'created_at'
 		}
 	},
 	{
 		title: '更新时间',
-		dataIndex: 'time',
+		dataIndex: 'updated_at',
 		sorter: true, // 排序
 		slots: {
-			customRender: 'time'
+			customRender: 'updated_at'
 		}
 	},
 	{

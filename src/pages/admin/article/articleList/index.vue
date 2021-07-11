@@ -1,59 +1,59 @@
 <template>
-	<!-- 按钮组 -->
-	<button-set />
-	<!-- 表格 -->
-	<a-table
-		:row-selection="{
-			selectedRows: articleListStore.selectedRows,
-			onChange: onSelectChange
-		}"
-		:loading="articleListStore.loading"
-		:columns="articleListStore.columns"
-		:row-key="record => record.content_hash"
-		:data-source="articleListStore.articlesInfo.articles"
-		:pagination="{
-			pageSize: articleListStore.pagingSetup.page_size,
-			total: articleListStore.articlesInfo.total,
-			showSizeChange: (page_num, page_size) =>
-				articleListStore.$path({ pagingSetup: page_num, page_size })
-		}"
-		:scroll="{ y: 400 }"
-	>
-		<!-- 标题 -->
-		<template #title="{ text }">{{ text }}</template>
-		<!-- 内容 -->
-		<template #content="{ text }">{{ text }}</template>
-		<!-- 分类 -->
-		<template #category="{ text }">
-			<a-tag color="blue">{{ text }}</a-tag>
-		</template>
-		<!-- 发布时间 -->
-		<template #time="{ text }">{{ text }}</template>
-		<!-- 更新时间 -->
-		<!-- <template #time="{ text }">{{ text }}</template> -->
-		<!-- 操作 start -->
-		<template #action="{ record }">
-			<a-space :size="8">
-				<a-button type="primary" @click="onEdit(record)">
-					<template #icon>
-						<EditOutlined />
-					</template>
-					编辑
-				</a-button>
-				<a-popconfirm title="确定要删除?" @confirm="onDelete(record)">
-					<a-button type="danger">
-						<template #icon>
-							<DeleteOutlined />
-						</template>
-						删除
+	<div class="articleList">
+		<!-- 按钮组 -->
+		<button-set />
+		<!-- 表格 -->
+		<a-table
+			:row-selection="{
+				selectedRows: articleListStore.selectedRows,
+				onChange: onSelectChange
+			}"
+			:loading="articleListStore.loading"
+			:columns="articleListStore.columns"
+			:row-key="record => record.content_hash"
+			:data-source="articleListStore.articlesInfo.articles"
+			:pagination="{
+				pageSize: articleListStore.pagingSetup.page_size,
+				total: articleListStore.articlesInfo.total,
+				showTotal: total => `共 ${total} 条数据`,
+				pageSizeOptions: ['5', '10', '15', '20'],
+				showSizeChanger: true,
+				showQuickJumper: true
+			}"
+			@change="changePaging"
+			:scroll="{ y: 'calc(100vh - 305px)' }"
+		>
+			<!-- 标题 -->
+			<template #name="{ text }">{{ text }}</template>
+			<!-- 分类 -->
+			<template #category="{ text }">
+				<a-tag color="blue">{{ text }}</a-tag>
+			</template>
+			<!-- 发布时间 -->
+			<template #created_at="{ text }">{{ text }}</template>
+			<!-- 更新时间 -->
+			<template #updated_at="{ text }">{{ text }}</template>
+			<!-- 操作 start -->
+			<template #action="{ record }">
+				<a-space :size="8">
+					<a-button type="primary" @click="onEdit(record)">
+						<EditOutlined />编辑
 					</a-button>
-				</a-popconfirm>
-			</a-space>
-		</template>
-		<!-- 操作 end -->
-	</a-table>
-	<!-- 抽屉 -->
-	<Modal />
+					<a-popconfirm
+						title="确定要删除?"
+						@confirm="onDelete(record)"
+					>
+						<a-button type="primary" danger>
+							<DeleteOutlined />删除
+						</a-button>
+					</a-popconfirm>
+				</a-space>
+			</template>
+			<!-- 操作 end -->
+		</a-table>
+		<!-- 抽屉 -->
+		<Modal />
+	</div>
 </template>
 
 <script>
@@ -70,35 +70,49 @@ export default defineComponent({
 	setup() {
 		// 获取文章
 		articleListStore.getArticle()
-
 		// 选择文章
-		const onSelectChange = (selectedRowKeys, selectedRows) => {
-			articleListStore.$patch({ selectedRows })
-			console.log(selectedRowKeys, toRaw(selectedRows))
-		}
+		const onSelectChange = selectedRowKeys =>
+			articleListStore.$patch({ selectedRowKeys })
 
 		// 编辑文章
 		const onEdit = record =>
-			articleListStore.$patch({ visible: true, formData: record })
-
+			articleListStore.$patch({
+				visible: true,
+				formData: record,
+				editingMode: 'edit'
+			})
 		// 删除文章
 		const onDelete = record => {
-			console.log(record)
+			articleListStore.deleteArticle(toRaw(record.content_hash))
 			// 重新获取文章
 			articleListStore.getArticle()
 		}
+		// 修改分页
+		const changePaging = pag => {
+			articleListStore.$patch({
+				pagingSetup: {
+					page_num: pag.current,
+					page_size: pag.pageSize
+				}
+			})
+			// 重新获取文章
+			articleListStore.getArticle()
+		}
+
 		return {
 			articleListStore,
 			onSelectChange,
 			onEdit,
-			onDelete
+			onDelete,
+			changePaging
 		}
 	}
 })
 </script>
 
 <style lang="less" scoped>
-.batchProcessing {
-	margin-bottom: 16px;
+.articleList {
+	height: calc(100%);
+	// overflow: auto;
 }
 </style>
