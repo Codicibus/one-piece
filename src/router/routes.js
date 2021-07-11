@@ -28,16 +28,6 @@ const routes = [
 				}
 			},
 			{
-				name: 'Setting',
-				path: 'setting',
-				// hidden: true, // 是否展示该路由
-				component: () => import('@/pages/admin/setting/index.vue'),
-				meta: {
-					title: '基础设置',
-					icon: 'el-icon-s-home'
-				}
-			},
-			{
 				name: 'ArticleList',
 				path: 'articleList',
 				// hidden: true, // 是否展示该路由
@@ -55,16 +45,6 @@ const routes = [
 				component: () => import('@article/articleClassify/index.vue'),
 				meta: {
 					title: '文章分类',
-					icon: 'el-icon-s-home'
-				}
-			},
-			{
-				name: 'PagingSetting',
-				path: 'pagingSetting',
-				// hidden: false, // 是否展示该路由
-				component: () => import('@article/pagingSetting/index.vue'),
-				meta: {
-					title: '分页设置',
 					icon: 'el-icon-s-home'
 				}
 			},
