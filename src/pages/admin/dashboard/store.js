@@ -30,9 +30,7 @@ export default defineStore({
 	},
 	actions: {
 		cpuInfo(tpye) {
-			this.cpu_info.forEach(item => {
-				return item[tpye]
-			})
+			return this.cpu_info.forEach(item => item[tpye])
 		},
 		RAMStat(tpye) {
 			return unitTransform(this.mem_stat[tpye]).toFixed(0) + ' MB'
