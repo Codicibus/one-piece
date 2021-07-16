@@ -1,11 +1,6 @@
 <template>
-	<!-- <a-textarea
-		v-model:value="articleListStore.formData.content"
-		:rows="4"
-		:placeholder="rules.content.message"
-	/> -->
 	<v-md-editor
-		height="100vh"
+		height="calc(100vh - 385px)"
 		v-model="articleListStore.formData.content"
 		:disabled-menus="[]"
 		@upload-image="handleUploadImage"
@@ -47,5 +42,6 @@ export default defineComponent({
 <style lang="less" scoped>
 .batchProcessing {
 	margin-bottom: 16px;
+	height: calc(100%);
 }
 </style>

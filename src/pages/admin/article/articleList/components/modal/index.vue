@@ -2,7 +2,7 @@
 	<a-drawer
 		title="编辑文章"
 		width="60%"
-		height="100vh"
+		height="100%"
 		v-model:visible="articleListStore.visible"
 		:body-style="{ paddingBottom: '80px' }"
 		@onClose="closeDrawer"
@@ -37,9 +37,7 @@
 				<a-col :span="12">
 					<a-form-item label="文章背景图" name="background_visible">
 						<a-switch
-							v-model:checked="
-								articleListStore.formData.background_visible
-							"
+							v-model:checked="articleListStore.formData.background_visible"
 							@change="
 								!articleListStore.formData.background_visible &&
 									(articleListStore.formData.background_random = false)
@@ -50,12 +48,8 @@
 				<a-col :span="12">
 					<a-form-item label="文章随机图" name="background_random">
 						<a-switch
-							v-model:checked="
-								articleListStore.formData.background_random
-							"
-							:disabled="
-								!articleListStore.formData.background_visible
-							"
+							v-model:checked="articleListStore.formData.background_random"
+							:disabled="!articleListStore.formData.background_visible"
 						/>
 					</a-form-item>
 				</a-col>
@@ -94,19 +88,13 @@
 			</a-row>
 		</a-form>
 		<div class="footer">
-			<a-button style="margin-right: 8px" @click="closeDrawer">
-				返回
-			</a-button>
+			<a-button style="margin-right: 8px" @click="closeDrawer"> 返回 </a-button>
 			<a-button type="primary" @click.prevent="submit">完成</a-button>
 		</div>
 	</a-drawer>
 </template>
 <script>
-import {
-	PlusOutlined,
-	UploadOutlined,
-	LoadingOutlined
-} from '@ant-design/icons-vue'
+import { PlusOutlined, UploadOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { defineComponent, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import Editor from '../editor/index.vue'
@@ -161,15 +149,11 @@ export default defineComponent({
 				switch (articleListStore.editingMode) {
 					// 添加文章
 					case 'add':
-						await articleListStore.addArticle(
-							articleListStore.formData
-						)
+						await articleListStore.addArticle(articleListStore.formData)
 						break
 					// 编辑文章
 					case 'edit':
-						await articleListStore.editArticle(
-							articleListStore.formData
-						)
+						await articleListStore.editArticle(articleListStore.formData)
 						break
 				}
 				closeDrawer()
