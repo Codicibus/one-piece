@@ -3,10 +3,7 @@
 		<a-row :gutter="16" class="serverState">
 			<a-col :span="6" class="state">
 				<div class="title">CPU使用情况</div>
-				<a-progress
-					type="dashboard"
-					:percent="dashboardStore.cpuPercent"
-				/>
+				<a-progress type="dashboard" :percent="dashboardStore.cpuPercent" />
 				<div class="detail">
 					{{ dashboardStore.cpuInfo('cores') + '个核心' }}
 					<a-divider type="vertical" />
@@ -15,10 +12,7 @@
 			</a-col>
 			<a-col :span="6" class="state">
 				<div class="title">内存使用情况</div>
-				<a-progress
-					type="dashboard"
-					:percent="dashboardStore.RAMPercent"
-				/>
+				<a-progress type="dashboard" :percent="dashboardStore.RAMPercent" />
 				<div class="detail">
 					{{ dashboardStore.RAMStat('used') }}
 					<a-divider type="vertical" />
@@ -36,21 +30,21 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent } from 'vue'
 // import socket from '@/utils/socket'
 import useStore from './store'
 let dashboardStore = useStore()
-const getSocket = () => {
-	socket.onmessage = evn => {
-		let serveDate = JSON.parse(evn.data)
-		dashboardStore.$state = { ...serveDate }
-	}
-}
+// const getSocket = () => {
+// 	socket.onmessage = evn => {
+// 		let serveDate = JSON.parse(evn.data)
+// 		dashboardStore.$state = { ...serveDate }
+// 	}
+// }
 export default defineComponent({
 	name: 'Dashboard',
 	setup() {
 		// onMounted(() => getSocket())
-		return { getSocket, dashboardStore }
+		return { dashboardStore }
 	}
 })
 </script>
