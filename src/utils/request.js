@@ -43,9 +43,10 @@ request.interceptors.response.use(
 		const msg = response.data.msg
 		const status = response.data.code
 		const res = response.data.data
+		const method = response.config.method
 		switch (status) {
 			case 0:
-				!res && message.success(msg || '错误')
+				method === 'post' && message.success(msg || '错误')
 				return res
 			case 7:
 				message.error(msg || '错误')
