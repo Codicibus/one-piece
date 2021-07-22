@@ -39,13 +39,8 @@
 					<a-button type="primary" @click="onEdit(record)">
 						<EditOutlined />编辑
 					</a-button>
-					<a-popconfirm
-						title="确定要删除?"
-						@confirm="onDelete(record)"
-					>
-						<a-button type="primary" danger>
-							<DeleteOutlined />删除
-						</a-button>
+					<a-popconfirm title="确定要删除?" @confirm="onDelete(record)">
+						<a-button type="primary" danger> <DeleteOutlined />删除 </a-button>
 					</a-popconfirm>
 				</a-space>
 			</template>
@@ -71,8 +66,7 @@ export default defineComponent({
 		// 获取文章
 		articleListStore.getArticle()
 		// 选择文章
-		const onSelectChange = selectedRowKeys =>
-			articleListStore.$patch({ selectedRowKeys })
+		const onSelectChange = selectedRowKeys => articleListStore.$patch({ selectedRowKeys })
 
 		// 编辑文章
 		const onEdit = record =>
@@ -112,7 +106,6 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .articleList {
-	height: calc(100%);
-	// overflow: auto;
+	height: 100%;
 }
 </style>
