@@ -5,10 +5,16 @@ import translate from './translate'
 import { message } from 'ant-design-vue'
 import NProgress from 'nprogress'
 
+let baseURL
+// 判断环境变量
+if (import.meta.env.MODE === 'production') {
+	baseURL = import.meta.env.VITE_BASE_URL
+}
+
 // 请求配置
 const request = axios.create({
 	timeout: 1000 * 3, // 请求超时
-	// baseURL: import.meta.env.VITE_BASE_URL, // 基础路径
+	baseURL, // 基础路径
 	responseType: 'json', // 请求响应类型
 	responseEncoding: 'utf8', // 编码格式
 	/**
@@ -21,8 +27,7 @@ const request = axios.create({
 request.interceptors.request.use(
 	config => {
 		NProgress.start()
-		config.url !== '/v1/user/login' &&
-			(config.headers['Authorization'] = getToken())
+		config.url !== '/v1/user/login' && (config.headers['Authorization'] = getToken())
 		return config
 	},
 	error => {
