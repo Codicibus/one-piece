@@ -1,6 +1,6 @@
 {
   "name": "one-piece",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,9 +10,7 @@
     "@kangc/v-md-editor": "^2.3.5",
     "ant-design-vue": "^2.2.0-beta.3",
     "axios": "^0.21.1",
-    "babel-plugin-prismjs": "^2.0.1",
     "dayjs": "^1.10.6",
-    "highlight.js": "^10.7.3",
     "js-cookie": "^2.2.1",
     "md5": "^2.3.0",
     "nprogress": "^0.2.0",
@@ -20,6 +18,7 @@
     "qs": "^6.10.1",
     "rollup-plugin-babel": "^4.4.0",
     "vite-plugin-importer": "^0.2.1",
+    "vite-plugin-prismjs": "^0.0.1",
     "vue": "^3.0.5",
     "vue-router": "^4.0.8"
   },

@@ -1,14 +1,13 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import usePluginImport from 'vite-plugin-importer'
+import prismjs from 'vite-plugin-prismjs'
 import babel from 'rollup-plugin-babel'
 import { resolve } from 'path'
 import proxy from './config/proxy'
 
-const components = require('prismjs/components')
-const allLanguages = Object.keys(components.languages).filter(
-	item => item !== 'meta'
-)
+import components from 'prismjs/components'
+const allLanguages = Object.keys(components.languages).filter(item => item !== 'meta')
 
 export default defineConfig({
 	// 在生产中服务时的基本公共路径
@@ -34,6 +33,8 @@ export default defineConfig({
 			style: 'css'
 		}),
 		babel(),
-		['prismjs', { languages: allLanguages }]
+		prismjs({
+			languages: allLanguages
+		})
 	]
 })
