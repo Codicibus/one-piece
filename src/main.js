@@ -19,8 +19,8 @@ app.use(pinia)
 app.use(Antd)
 app.use(editor)
 app.mount('#app')
-if (import.meta.env.MODE === 'production') {
-	console.log('当前是生产环境')
-} else {
-	console.log('当前是开发环境')
-}
+// if (import.meta.env.MODE === 'production') {
+// 	console.log('当前是生产环境')
+// } else {
+// 	console.log('当前是开发环境')
+// }
