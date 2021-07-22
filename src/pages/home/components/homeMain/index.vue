@@ -1,30 +1,34 @@
 <template>
-	<main>
-		<home-aside />
-		<div class="content">
+	<main class="homeMain">
+		<div>
 			<home-card />
-			<footer>MIT Licensed | Copyright © 2021 Codicibus</footer>
 		</div>
 	</main>
 </template>
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import HomeCard from './Card.vue'
-import HomeAside from './Aside.vue'
 export default defineComponent({
-	components: { HomeCard, HomeAside },
-	setup() {}
+	components: { HomeCard },
+	setup() {
+		const current1 = ref(1)
+		const onChange = pageNumber => {
+			console.log('Page: ', pageNumber)
+		}
+		return {
+			current1,
+			onChange
+		}
+	}
 })
 </script>
 
 <style lang="less" scope>
-main {
+.homeMain {
 	width: 100%;
-	height: 100%;
-	display: flex;
-	padding: 16px;
-	.content {
-		width: 100%;
-	}
+	height: calc(100% - 130px);
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding: 32px;
 }
 </style>
