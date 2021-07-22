@@ -10,7 +10,7 @@ import components from 'prismjs/components'
 const allLanguages = Object.keys(components.languages).filter(item => item !== 'meta')
 
 export default defineConfig({
-	// 在生产中服务时的基本公共路径
+	// 基础访问路径
 	base: '/',
 	// 服务端渲染
 	ssr: false,
