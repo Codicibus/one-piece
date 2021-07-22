@@ -1,15 +1,35 @@
 <template>
 	<main class="homeMain">
 		<div>
-			<home-card />
+			<a-row class="card" :gutter="[0, 32]">
+				<!-- 文章 -->
+				<a-col :span="24">
+					<home-article />
+				</a-col>
+				<a-col :span="24">
+					<home-article />
+				</a-col>
+				<a-col :span="24">
+					<home-article />
+				</a-col>
+				<!-- 分页 -->
+				<a-col :span="24" class="pagination">
+					<a-pagination
+						show-quick-jumper
+						v-model:current="current1"
+						:total="500"
+						@change="onChange"
+					/>
+				</a-col>
+			</a-row>
 		</div>
 	</main>
 </template>
 <script>
 import { defineComponent, ref } from 'vue'
-import HomeCard from './Card.vue'
+import HomeArticle from './Article.vue'
 export default defineComponent({
-	components: { HomeCard },
+	components: { HomeArticle },
 	setup() {
 		const current1 = ref(1)
 		const onChange = pageNumber => {
@@ -30,5 +50,12 @@ export default defineComponent({
 	overflow-x: hidden;
 	overflow-y: auto;
 	padding: 32px;
+	.card {
+		width: 100%;
+		height: 100%;
+		.pagination {
+			text-align: center;
+		}
+	}
 }
 </style>
