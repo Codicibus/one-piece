@@ -5,7 +5,7 @@ import md5 from 'md5'
 let baseURL
 // 判断环境变量
 if (import.meta.env.MODE === 'production') {
-	baseURL = import.meta.env.VITE_BASE_URL
+	baseURL = import.meta.env.VITE_TRANSLATE_URL
 }
 
 // 请求配置
