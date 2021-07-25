@@ -17,10 +17,11 @@ func Routers() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Use(cors.New(
 		cors.Config{
-			AllowAllOrigins:  true,
+			//AllowAllOrigins:  true,
+			AllowOrigins:     global.OConfig.Cors.Origins,
 			AllowCredentials: true,
-			AllowMethods:     []string{"GET", "POST"},
-			AllowHeaders:     []string{"Origin", "Content-Type"},
+			AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+			AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 			ExposeHeaders:    []string{"Content-Length"},
 			MaxAge:           12 * time.Hour,
 		}))

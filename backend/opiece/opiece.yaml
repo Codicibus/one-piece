@@ -7,6 +7,9 @@ gin:
   mode: debug
   port: 8081
 
+cors:
+  origins: ["https://123mtr.top/"]
+
 db:
   type: postgres
 

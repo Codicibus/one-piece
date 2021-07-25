@@ -19,6 +19,9 @@ type Config struct {
 	DB struct {
 		Type string `yaml:"type"`
 	} `yaml:"db"`
+	Cors struct {
+		Origins []string `yaml:"origins"`
+	}
 	Postgres struct {
 		DBPort     int    `yaml:"db_port"`
 		DBHost     string `yaml:"db_host"`
