@@ -54,7 +54,7 @@ func PostArticle(c *gin.Context) {
 		return
 	}
 	if A.ContentHash == "" {
-		A.ContentHash = utils.MD5([]byte(A.Title+A.Content))
+		A.ContentHash = utils.MD5([]byte(A.Title + A.Content))
 	}
 	if A.BackgroundVisible {
 		if A.BackgroundPic == "" && !A.BackgroundRandom {
@@ -63,11 +63,8 @@ func PostArticle(c *gin.Context) {
 			return
 		}
 		if A.BackgroundPic == "" && A.BackgroundRandom {
-			A.BackgroundPic = "/v1/image/query?image_hash=" + service.GetRandomBackgroundPic().ImageHash
+			A.BackgroundPic = service.GetRandomBackgroundPic().ImageHash
 		}
-	}
-	if !strings.HasPrefix(A.BackgroundPic, "http") {
-		A.BackgroundPic = "v1/image/query?image_hash=" + A.BackgroundPic
 	}
 	articleRet, err := service.PostArticle(A)
 	if err != nil {
@@ -108,7 +105,7 @@ func UpdateArticle(c *gin.Context) {
 		return
 	}
 	if A.ContentHash == "" {
-		A.ContentHash = utils.MD5([]byte(A.Title+A.Content))
+		A.ContentHash = utils.MD5([]byte(A.Title + A.Content))
 	}
 	if A.BackgroundVisible {
 		if A.BackgroundPic == "" && !A.BackgroundRandom {
@@ -176,7 +173,7 @@ func DeleteArticle(c *gin.Context) {
 	errs := service.DeleteArticleBatch(contentHashes, uuid.String())
 	if len(errs) != 0 {
 		for _, err := range errs {
-			response.FailWithDetailed(nil, "操作出现失败: "+ err.Error(), c)
+			response.FailWithDetailed(nil, "操作出现失败: "+err.Error(), c)
 		}
 		c.Abort()
 		return
@@ -220,7 +217,7 @@ func GetArticle(c *gin.Context) {
 		count = -1
 		// TODO: record log
 	}
-	if count >= 10 && pageNum == 0{
+	if count >= 10 && pageNum == 0 {
 		pageNum = 10
 	} else {
 		pageNum = 0
