@@ -26,7 +26,8 @@ import {
 	Upload,
 	Popconfirm,
 	Pagination,
-	Modal
+	Modal,
+	Spin
 } from 'ant-design-vue'
 // 导入
 export default app => {
@@ -57,4 +58,5 @@ export default app => {
 	app.use(Popconfirm)
 	app.use(Pagination)
 	app.use(Modal)
+	app.use(Spin)
 }

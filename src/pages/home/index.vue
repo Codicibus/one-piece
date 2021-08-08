@@ -42,12 +42,11 @@ export default defineComponent({
 		background: rgba(255, 255, 255, 0.3);
 		box-shadow: 0 0 5px rgba(170, 170, 170, 0.3);
 		.leftContainer {
-			flex: 1;
-			width: 100%;
+			width: 200px;
 			height: 100%;
 		}
 		.rightContainer {
-			width: 100%;
+			width: 900px;
 			height: 100%;
 		}
 	}
